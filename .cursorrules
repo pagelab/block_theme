@@ -18,7 +18,7 @@ A ideia do projeto é gerar layouts a partir do Pinegrow, exportá-los como tema
 – Arquivos CSS do Tailwind (diretório `/tailwind_theme`): substituir classes de cor nativas do Tailwind pelos equivalente semânticos, conforme tabela, alterando os valores das propriedades CSS (ex: `color` e `background-color`) para as variáveis CSS da paleta semântica adicionadas no arquivo `theme.json`, removendo referências à variável `--tw-bg-opacity` do Tailwind.
 
 ## Requisitos:
-– O script `semantic-colors.js` deve ser eficiente e seguro, evitando loops infinitos e colisão de alterações, com expressões regulares precisas que evitem erros de seleção de string.
+– O script `semantic-colors.js`, situado no diretório `_tools`, deve ser eficiente e seguro, evitando loops infinitos e colisão de alterações, com expressões regulares precisas que evitem erros de seleção de string.
 
 ## Expectativa de resultado:
 Exemplos com trechos de código:
@@ -321,6 +321,8 @@ block_theme/
 - Não usar bibliotecas externas não aprovadas (usar apenas WP core e Tailwind).
 - Não modificar arquivos de núcleo do WordPress nem o functions.php do tema.
 - Não incluir código inline de CSS/JS fora do padrão definido.
+– Não inclua arquivos aleatórios na raiz do projeto.
+– Registe todos os passos executados desde o início em arquivos .log (em Markdown) no diretório `_tools/logs/`.
 
 ## Performance e Segurança
 - Minificar e otimizar scripts e estilos.
