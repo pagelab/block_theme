@@ -1,0 +1,230 @@
+DESCRIÇÃO DA BIBLIOTECA DE TOKENS
+---------------------------------
+O Pinegrow é um aplicativo desktop que agiliza a criação de temas do WordPress, tanto clássicos como de bloco. Sua limitação é que a integração com os recursos mais avançados dos temas de bloco é limitada e ele não segue as convenções nativas do WordPress quanto à criação de blocos, oferecendo seus próprios métodos para criação de controles via UI.
+
+Um notável recurso é a integração com o Tailwind, com controles visuais e funções especiais para personalizar a experiência de autoração com esse framework CSS. Ainda que ofereça controles facilitados para aplicações de tokens de design, ele não integra os tokens do Taiwlind ao ao theme.json, ficando limitado à exportação do arquivo CSS do framework com valores hardcoded.
+
+A ideia do projeto é gerar layouts a partir do Pinegrow, exportá-los como temas de bloco para uma base rápida de desenvolvimento. A partir daí, processar os arquivos do tema com a ajuda de um script node para converter as classes de cor nativas do Tailwind, presente nos arquivos CSS exportados na pasta `tailwind_theme`, em classes semânticas e substituí-las tanto no theme.json, na forma de uma paleta de cor semântica, quanto nos arquivos PHP responsáveis pelos blocos, seja no back-end ou no front-end, removendo no processo todas as demais referências à classes e variáveis CSS fora da lista branca de classes semânticas.
+
+
+Alterações:
+– Arquivos PHP de todos os blocos (subpastas em `/blocks`): substituir nomes de classes de cor nativas do Tailwind por nomes semânticos e remover classes de cor não presentes na tabela de mapeamento.
+– Arquivos `theme.json` (pasta raiz): remover paleta completa de cores do Tailwind, e substituir pela paleta de cores semântica, mantendo a equivalência de valores RBG segundo a tabela de mapeamento.
+– Arquivos CSS do Tailwind (diretório `/tailwind_theme`): substituir classes de cor nativas do Tailwind pelos equivalente semânticos, conforme tabela, alterando os valores das propriedades CSS (ex: `color` e `background-color`) para as variáveis CSS da paleta semântica adicionadas no arquivo `theme.json`, removendo referências à variável `--tw-bg-opacity` do Tailwind.
+
+Requisitos:
+– O script `semantic-colors.js` deve ser eficiente e seguro, evitando loops infinitos e colisão de alterações, com expressões regulares precisas que evitem erros de seleção de string.
+
+Exemplos com trechos de código:
+
+1) Antes (arquivos processados e exportados pelo Pinegrow)
+
+theme.json
+```
+{
+    "color": "rgba(29,78,216,1)",
+    "name": "blue-700",
+    "slug": "blue-700"
+},
+```
+
+tailwind.css
+```
+.bg-blue-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(219 234 254 / var(--tw-bg-opacity));
+}
+```
+
+hero.php
+```
+ <a href="<?php echo (!empty($_GET['context']) && $_GET['context'] === 'edit') ? 'javascript:void()' : PG_Blocks_v3::getLinkUrl( $args, 'primary_button_link' ) ?>" class="bg-blue-700 font-medium inline-block px-6 py-3 text-white"><?php echo PG_Blocks_v3::getAttribute( $args, 'primary_button_text' ) ?></a>
+```
+
+2) Depois (arquivos processados pelo script Node `semantic-colors.js`)
+
+theme.json
+```
+{
+    "color": "rgba(29,78,216,1)",
+    "name": "Marca (fundo base)",
+    "slug": "brand-bg-base"
+},
+```
+
+tailwind.css
+```
+.brand-bg-base{
+  background-color: var(--wp--preset--color--brand-bg-base);
+}
+```
+
+hero.php
+```
+ <a href="<?php echo (!empty($_GET['context']) && $_GET['context'] === 'edit') ? 'javascript:void()' : PG_Blocks_v3::getLinkUrl( $args, 'primary_button_link' ) ?>" class="brand-bg-base font-medium inline-block px-6 py-3 text-inverse"><?php echo PG_Blocks_v3::getAttribute( $args, 'primary_button_text' ) ?></a>
+```
+
+Essa operação oferecerá ao usuário controles para alteração global das cores sem muito esforço, diretamente da interface do Global Styles do editor do WordPress.
+
+Os tokens abaixo são o ponto de partida para a oferta de cores personalizáveis pelo editor do WordPress (Global Styles).
+
+Layouts mais opinionados terão um nível de personalização menor, enquanto layouts mais genéricos terão mais opções de cores.
+
+O importante é que o script `semantic-colors.js` fará a substituição dos tokens de cores Tailwind encontradas pelos token de cores descritas abaixo.
+
+Cores da marca (texto e fundo)
+    •   Marca base – Cor principal da marca.
+    •   Marca alternativo – Cor complementar à principal, usada para contraste e suporte visual.
+    •   Marca acento – Cor de destaque para chamar atenção em elementos estratégicos.
+
+Cores de fundo
+    •   Fundo base – Cor principal de fundo do site.
+    •   Fundo suave – Cor usada para criar seções alternadas e diferenciar blocos.
+    •   Fundo inverso – Cor de fundo principal invertida.
+    •   Fundo inverso suave – Cor invertida usada para criar seções alternadas e diferenciar blocos escuros.
+
+Cores de texto
+    •   Texto base – Cor padrão para parágrafos e textos de destaque.
+    •   Texto suave – Cor para textos de menor importância ou descrição.
+    •   Texto inverso – Cor usada quando o texto aparece sobre fundos escuros.
+    •   Texto inverso suave – Cor usada quando o texto aparece sobre fundos escuros e é necessária uma diferenciação em relação ao texto em fundo inverso.
+
+Cores de borda
+    •   Borda base – Cor padrão das bordas.
+    •   Borda suave – Cor mais clara ou sutil para bordas de elementos menores.
+    •   Borda invertida – Cor mais clara ou sutil para bordas de elementos menores em fundos invertidos.
+    •   Borda invertida suave – Cor mais clara ou sutil para bordas de elementos menores em fundos invertidos com diferenciação às bordas regualres.
+
+Cores de feedback
+    •   Retorno Sucesso – Cor que indica ação bem-sucedida ou confirmação.
+    •   Retorno Aviso – Cor que indica atenção ou precaução.
+    •   Retorno Erro – Cor que indica falha ou problema.
+    •   Retorno Informação – Cor que destaca mensagens informativas.
+
+Cores de elementos
+    •   Botão base – Cor de fundo do botão principal.
+    •   Botão inveso – Cor de fundo do botão inverso ao principal.
+    •   Botão acento – Cor de fundo do botão de destaque.
+    •   Quadro – Cor de fundo usada para destacar caixas ou blocos de conteúdo.
+
+
+LISTA DE TOKENS
+----------------------
+Cores da marca
+    •   brand-bg-base
+    •   brand-bg-alt
+    •   brand-bg-accent
+    •   brand-text-base
+    •   brand-text-alt
+    •   brand-text-accent
+
+Cores de fundo
+    •   bg-base
+    •   bg-subtle
+    •   bg-inverse
+    •   bg-inverse-subtle
+
+Cores de texto
+    •   texto-base
+    •   texto-subtle
+    •   texto-inverse
+    •   texto-inverse-subtle
+
+Cores de borda
+    •   border-base
+    •   border-subtle
+    •   border-inverse
+    •   border-inverse-subtle
+
+Cores de feedback
+    •   bg-success
+    •   bg-warning
+    •   bg-error
+    •   bg-info
+
+Cores de elementos
+    •   button-base
+    •   button-inverse
+    •   button-accent
+    •   card
+
+
+MAPEAMENTO ENTRE TOKENS E CORES DO TAILWIND
+|---------------------|-----------------|
+| Token               | Cor Tailwind    |
+|---------------------|-----------------|
+| brand-bg-base       | bg-blue-700     |
+| brand-bg-alt        | bg-green-600    |
+| brand-bg-accent     | bg-red-600      |
+| brand-text-base     | text-blue-700   |
+| brand-text-alt      | text-green-600  |
+| brand-text-accent   | text-red-600    |
+| bg-base             | bg-white        |
+| bg-subtle           | bg-gray-200     |
+| bg-inverse          | bg-gray-950     |
+| bg-inverse-subtle   | bg-gray-900     |
+| text-base           | text-gray-900   |
+| text-subtle         | text-gray-800   |
+| text-inverse        | text-gray-50    |
+| text-inverse-subtle | text-gray-300   |
+| border-base         | border-gray-400 |
+| border-subtle       | border-gray-150 |
+| bg-success          | bg-green-200    |
+| bg-warning          | bg-yellow-200   |
+| bg-error            | bg-red-200      |
+| bg-info             | bg-blue-200     |
+| bg-button-base      | bg-blue-600     |
+| bg-button-inverse   | bg-transparent  |
+| bg-button-accent    | bg-red-500      |
+| bg-card             | bg-gray-250     |
+|---------------------|-----------------|
+
+
+To-dos:
+
+1) No Pinegrow: adicionar tons ausentes na escala da cor Gray nativa do Tailwind utilizando a UI do Pinegrow:
+• gray-50
+• gray-150
+• gray-250
+• gray-950
+
+2) Substituir valores das variáveis “prose” do Tailwind para variáveis definidas no theme.json:
+
+Importante! O token de cor `text-base` deve ser criado manualmente no theme.json com a cor `black` e depois referenciado no estilo body do Tailwind, na variável --tw-prose-body, para que o usuário tenha o controle da cor base do texto.
+
+  --tw-prose-body: var(--wp-preset-color-black);
+  --tw-prose-headings: #111827;
+  --tw-prose-lead: #4b5563;
+  --tw-prose-links: #111827;
+  --tw-prose-bold: #111827;
+  --tw-prose-counters: #6b7280;
+  --tw-prose-bullets: #d1d5db;
+  --tw-prose-hr: #e5e7eb;
+  --tw-prose-quotes: #111827;
+  --tw-prose-quote-borders: #e5e7eb;
+  --tw-prose-captions: #6b7280;
+  --tw-prose-kbd: #111827;
+  --tw-prose-kbd-shadows: 17 24 39;
+  --tw-prose-code: #111827;
+  --tw-prose-pre-code: #e5e7eb;
+  --tw-prose-pre-bg: #1f2937;
+  --tw-prose-th-borders: #d1d5db;
+  --tw-prose-td-borders: #e5e7eb;
+  --tw-prose-invert-body: #d1d5db;
+  --tw-prose-invert-headings: #fff;
+  --tw-prose-invert-lead: #9ca3af;
+  --tw-prose-invert-links: #fff;
+  --tw-prose-invert-bold: #fff;
+  --tw-prose-invert-counters: #9ca3af;
+  --tw-prose-invert-bullets: #4b5563;
+  --tw-prose-invert-hr: var(--wp-preset-color-black);
+  --tw-prose-invert-quotes: #f3f4f6;
+  --tw-prose-invert-quote-borders: var(--wp-preset-color-black);
+  --tw-prose-invert-captions: #9ca3af;
+  --tw-prose-invert-kbd: #fff;
+  --tw-prose-invert-kbd-shadows: 255 255 255;
+  --tw-prose-invert-code: #fff;
+  --tw-prose-invert-pre-code: #d1d5db;
+  --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%);
+  --tw-prose-invert-th-borders: #4b5563;
+  --tw-prose-invert-td-borders: var(--wp-preset-color-black);
