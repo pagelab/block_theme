@@ -190,41 +190,41 @@ To-dos:
 
 2) Substituir valores das variáveis “prose” do Tailwind para variáveis definidas no theme.json:
 
-Importante! O token de cor `text-base` deve ser criado manualmente no theme.json com a cor `black` e depois referenciado no estilo body do Tailwind, na variável --tw-prose-body, para que o usuário tenha o controle da cor base do texto.
+Importante! O token de cor `text-base` deve referenciado no estilo body do Tailwind, na variável --tw-prose-body, para que o usuário tenha o controle da cor base do texto. As demais cores devem ser alteradas com a função `color-mix()` do CSS com opacidade variável ou utilizar diretamente as variáveis semânticas conforme o elemento, de acordo com a descrição abaixo (incluir fallback para navegadores antigos):
 
-  --tw-prose-body: var(--wp-preset-color-black);
-  --tw-prose-headings: #111827;
-  --tw-prose-lead: #4b5563;
-  --tw-prose-links: #111827;
-  --tw-prose-bold: #111827;
-  --tw-prose-counters: #6b7280;
-  --tw-prose-bullets: #d1d5db;
-  --tw-prose-hr: #e5e7eb;
-  --tw-prose-quotes: #111827;
-  --tw-prose-quote-borders: #e5e7eb;
-  --tw-prose-captions: #6b7280;
-  --tw-prose-kbd: #111827;
-  --tw-prose-kbd-shadows: 17 24 39;
-  --tw-prose-code: #111827;
-  --tw-prose-pre-code: #e5e7eb;
-  --tw-prose-pre-bg: #1f2937;
-  --tw-prose-th-borders: #d1d5db;
-  --tw-prose-td-borders: #e5e7eb;
-  --tw-prose-invert-body: #d1d5db;
-  --tw-prose-invert-headings: #fff;
-  --tw-prose-invert-lead: #9ca3af;
-  --tw-prose-invert-links: #fff;
-  --tw-prose-invert-bold: #fff;
-  --tw-prose-invert-counters: #9ca3af;
-  --tw-prose-invert-bullets: #4b5563;
-  --tw-prose-invert-hr: var(--wp-preset-color-black);
-  --tw-prose-invert-quotes: #f3f4f6;
-  --tw-prose-invert-quote-borders: var(--wp-preset-color-black);
-  --tw-prose-invert-captions: #9ca3af;
-  --tw-prose-invert-kbd: #fff;
-  --tw-prose-invert-kbd-shadows: 255 255 255;
-  --tw-prose-invert-code: #fff;
-  --tw-prose-invert-pre-code: #d1d5db;
-  --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%);
-  --tw-prose-invert-th-borders: #4b5563;
-  --tw-prose-invert-td-borders: var(--wp-preset-color-black);
+  --tw-prose-body: var(--wp--preset--color--text-base);
+  --tw-prose-headings: #111827; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-lead: #4b5563; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-links: #111827; // var(--wp--preset--color--link);
+  --tw-prose-bold: #111827; // var(--wp--preset--color--text-base);
+  --tw-prose-counters: #6b7280; // var(--wp--preset--color--text-base);
+  --tw-prose-bullets: #d1d5db; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-hr: #e5e7eb; // var(--wp--preset--color--text-base);
+  --tw-prose-quotes: #111827; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-quote-borders: #e5e7eb; // var(--wp-preset-color--border-base);
+  --tw-prose-captions: #6b7280; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-kbd: #111827; // color-mix(in srgb, var(--wp--preset--color--text-base) 60%, white);
+  --tw-prose-kbd-shadows: 17 24 39; // color-mix(in srgb, var(--wp--preset--color--text-base) 30%, white);
+  --tw-prose-code: #111827; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-pre-code: #e5e7eb; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-pre-bg: #1f2937; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-th-borders: #d1d5db; // var(--wp-preset-color--border-subtle);
+  --tw-prose-td-borders: #e5e7eb; // var(--wp-preset-color--border-subtle);
+  --tw-prose-invert-body: #d1d5db; //  var(--wp--preset--color--text-inverse)
+  --tw-prose-invert-headings: #fff; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-lead: #9ca3af; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-links: #fff; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 60%, white);
+  --tw-prose-invert-bold: #fff; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-counters: #9ca3af; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-bullets: #4b5563; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-hr: // var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-quotes: #f3f4f6; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-invert-quote-borders: // color-mix(in srgb, var(--wp--preset--color--text-inverse) 50%, white);
+  --tw-prose-invert-captions: #9ca3af; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-kbd: #fff; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-kbd-shadows: 255 255 255; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 30%, white);
+  --tw-prose-invert-code: #fff; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 50%, white);
+  --tw-prose-invert-pre-code: #d1d5db; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%); // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-invert-th-borders: #4b5563; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 50%, white);
+  --tw-prose-invert-td-borders:// color-mix(in srgb, var(--wp--preset--color--text-inverse) 50%, white);
