@@ -1,0 +1,61 @@
+<?php
+
+        PG_Blocks_v3::register_block_type( array(
+            'name' => 'block-theme/events',
+            'title' => __( 'Events', 'block_theme' ),
+            'description' => __( 'Events section', 'block_theme' ),
+            'icon' => 'dashicons-art',
+            'category' => 'design',
+            'supports' => array(),
+            'base_url' => get_template_directory_uri(),
+            'base_path' => get_template_directory(),
+            'js_file' => 'blocks/events/events.js',
+            'attributes' => array(
+                'text_color' => array(
+                    'type' => array('string', 'null'),
+                    'default' => ''
+                ),
+                'tagline' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Tagline'
+                ),
+                'heading' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Events'
+                ),
+                'heading_color' => array(
+                    'type' => array('string', 'null'),
+                    'default' => ''
+                ),
+                'description' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.'
+                ),
+                'button_all' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'View all'
+                ),
+                'button_cat1' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Category one'
+                ),
+                'button_cat2' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Category two'
+                ),
+                'button_cat3' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Category three'
+                ),
+                'button_cat4' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Category four'
+                )
+            ),
+            'example' => array(
+'text_color' => '', 'tagline' => 'Tagline', 'heading' => 'Events', 'heading_color' => '', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.', 'button_all' => 'View all', 'button_cat1' => 'Category one', 'button_cat2' => 'Category two', 'button_cat3' => 'Category three', 'button_cat4' => 'Category four'
+            ),
+            'dynamic' => false,
+            'has_inner_blocks' => true,
+            'version' => '1.0.7'
+        ) );

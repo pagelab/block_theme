@@ -22,5 +22,5 @@
 'logo_image' => array('id' => 0, 'url' => 'https://images.unsplash.com/photo-1692976000563-1ffdbd9047c5?ixid=M3wyMDkyMnwwfDF8c2VhcmNofDZ8fHdlYmZsb3clMjBsb2dvfGVufDB8fHx8MTc1NDUxNzcwMHww&ixlib=rb-4.1.0q=85&fm=jpg&crop=faces&cs=srgb&w=1200&h=800&fit=crop', 'size' => '', 'svg' => '', 'alt' => 'Webflow'), 'alt_text' => 'Webflow'
             ),
             'dynamic' => true,
-            'version' => '1.0.4'
+            'version' => '1.0.14'
         ) );

@@ -165,8 +165,8 @@ MAPEAMENTO ENTRE TOKENS E CORES DO TAILWIND
 | bg-inverse-subtle   | bg-gray-900     |
 | text-base           | text-gray-900   |
 | text-subtle         | text-gray-800   |
-| text-inverse        | text-gray-50    |
-| text-inverse-subtle | text-gray-300   |
+| text-inverse        | text-white      |
+| text-inverse-subtle | text-gray-50    |
 | border-base         | border-gray-400 |
 | border-subtle       | border-gray-150 |
 | bg-success          | bg-green-200    |

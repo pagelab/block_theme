@@ -157,10 +157,10 @@ if ( ! function_exists( 'block_theme_enqueue_scripts' ) ) :
         /* Pinegrow generated Enqueue Styles Begin */
 
     wp_deregister_style( 'block_theme-tailwind' );
-    wp_enqueue_style( 'block_theme-tailwind', get_template_directory_uri() . '/tailwind_theme/tailwind.css', [], '1.0.4', 'all');
+    wp_enqueue_style( 'block_theme-tailwind', get_template_directory_uri() . '/tailwind_theme/tailwind.css', [], '1.0.14', 'all');
 
     wp_deregister_style( 'block_theme-style' );
-    wp_enqueue_style( 'block_theme-style', get_bloginfo('stylesheet_url'), [], '1.0.4', 'all');
+    wp_enqueue_style( 'block_theme-style', get_bloginfo('stylesheet_url'), [], '1.0.14', 'all');
 
     /* Pinegrow generated Enqueue Styles End */
 

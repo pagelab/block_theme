@@ -49,5 +49,5 @@
 'hero_image' => array('id' => 0, 'url' => 'https://images.unsplash.com/photo-1602064172250-43f8909056c7?ixid=M3wyMDkyMnwwfDF8c2VhcmNofDExfHx3ZWJkZXNpZ24lMjBwcm9jZXNzfGVufDB8fHx8MTc1NDUxNjQ2OHww&ixlib=rb-4.1.0q=85&fm=jpg&crop=faces&cs=srgb&w=800&h=800&fit=crop', 'size' => '', 'svg' => '', 'alt' => 'Web Design Process'), 'heading' => 'Medium length hero heading goes here', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.', 'font_family' => '', 'primary_button_link' => array('post_id' => 0, 'url' => '#', 'post_type' => '', 'title' => ''), 'primary_button_text' => 'Button', 'secondary_button_link' => array('post_id' => 0, 'url' => '#', 'post_type' => '', 'title' => ''), 'secondary_button_text' => 'Button'
             ),
             'dynamic' => true,
-            'version' => '1.0.4'
+            'version' => '1.0.14'
         ) );

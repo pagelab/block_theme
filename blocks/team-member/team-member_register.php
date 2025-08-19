@@ -42,5 +42,5 @@
 'image' => array('id' => 0, 'url' => 'https://images.unsplash.com/photo-1518592522655-40b66b7e5e58?ixid=M3wyMDkyMnwwfDF8c2VhcmNofDF8fHdlYmRlc2lnbmVyfGVufDB8fHx8MTc1NDUxODQ0Nnww&ixlib=rb-4.1.0q=85&fm=jpg&crop=faces&cs=srgb&w=1200&h=800&fit=crop', 'size' => '', 'svg' => '', 'alt' => 'Web Designer'), 'name' => 'Sarah Johnson', 'position' => 'Lead UI Designer', 'bio' => 'Specializes in creating intuitive user interfaces with over 8 years of experience in responsive design and user experience optimization.', 'social_link_1' => array('post_id' => 0, 'url' => '#', 'post_type' => '', 'title' => ''), 'social_link_2' => array('post_id' => 0, 'url' => '#', 'post_type' => '', 'title' => ''), 'social_link_3' => array('post_id' => 0, 'url' => '#', 'post_type' => '', 'title' => '')
             ),
             'dynamic' => true,
-            'version' => '1.0.4'
+            'version' => '1.0.14'
         ) );
