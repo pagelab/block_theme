@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Google Sheets - Tokens Semânticos</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .formula {
+            background: #e8f5e8;
+            border: 1px solid #c8e6c9;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎨 Template Google Sheets - Tokens Semânticos</h1>
+        <p>Guia completo para criar e configurar sua planilha de tokens semânticos</p>
+    </div>
+
+    <h2>📋 Visão Geral</h2>
+    <p>Este template ajuda você a criar um Google Sheets para editar tokens semânticos de forma visual e colaborativa. O arquivo CSV gerado será usado pelo script <code>semantic-colors.js</code> para converter classes Tailwind em tokens semânticos.</p>
+
+    <div class="step">
+        <h3>🚀 Passo 1: Criar o Google Sheets</h3>
+        <ol>
+            <li>Acesse <a href="https://sheets.google.com" target="_blank">Google Sheets</a></li>
+            <li>Crie uma nova planilha</li>
+            <li>Nomeie como "Tokens Semânticos - [Nome do Projeto]"</li>
+            <li>Configure o compartilhamento se necessário</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>📊 Passo 2: Configurar as Colunas</h3>
+        <p>Configure as seguintes colunas na primeira linha (A1:H1):</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Coluna</th>
+                    <th>Posição</th>
+                    <th>Descrição</th>
+                    <th>Formato</th>
+                    <th>Exemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="highlight">category</td>
+                    <td>A</td>
+                    <td>Grupo semântico do token</td>
+                    <td>Dropdown</td>
+                    <td>brand, background, text</td>
+                </tr>
+                <tr>
+                    <td class="highlight">slug</td>
+                    <td>B</td>
+                    <td>Identificador único</td>
+                    <td>Texto</td>
+                    <td>brand-bg-base</td>
+                </tr>
+                <tr>
+                    <td class="highlight">tailwind_class</td>
+                    <td>C</td>
+                    <td>Classe Tailwind original</td>
+                    <td>Texto</td>
+                    <td>bg-blue-700</td>
+                </tr>
+                <tr>
+                    <td class="highlight">color_hex</td>
+                    <td>D</td>
+                    <td>Cor em hexadecimal</td>
+                    <td>Cor + Validação</td>
+                    <td>#1d4ed8</td>
+                </tr>
+                <tr>
+                    <td class="highlight">color_rgb</td>
+                    <td>E</td>
+                    <td>Cor em RGB</td>
+                    <td>Fórmula automática</td>
+                    <td>29 78 216</td>
+                </tr>
+                <tr>
+                    <td class="highlight">name</td>
+                    <td>F</td>
+                    <td>Nome amigável</td>
+                    <td>Texto</td>
+                    <td>Marca (fundo base)</td>
+                </tr>
+                <tr>
+                    <td class="highlight">description</td>
+                    <td>G</td>
+                    <td>Descrição detalhada</td>
+                    <td>Texto longo</td>
+                    <td>Cor de fundo principal da marca</td>
+                </tr>
+                <tr>
+                    <td class="highlight">status</td>
+                    <td>H</td>
+                    <td>Status do token</td>
+                    <td>Dropdown</td>
+                    <td>active, inactive, draft</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="step">
+        <h3>🎨 Passo 3: Configurar Validação de Dados</h3>
+        
+        <h4>Dropdown para Categoria (Coluna A):</h4>
+        <div class="code">
+            brand
+            background
+            text
+            border
+            button
+            state
+            ui
+        </div>
+        
+        <h4>Dropdown para Status (Coluna H):</h4>
+        <div class="code">
+            active
+            inactive
+            draft
+        </div>
+        
+        <p><strong>Como configurar:</strong></p>
+        <ol>
+            <li>Selecione a coluna A (category)</li>
+            <li>Vá em Dados → Validação de dados</li>
+            <li>Escolha "Lista de itens"</li>
+            <li>Digite os valores separados por vírgula</li>
+            <li>Repita para a coluna H (status)</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>🔧 Passo 4: Configurar Fórmulas Automáticas</h3>
+        
+        <h4>Fórmula para RGB (Coluna E):</h4>
+        <div class="formula">
+            =IF(D2<>"", CONCATENATE(HEX2DEC(LEFT(MID(D2,2,6),2)), " ", HEX2DEC(MID(MID(D2,2,6),3,2)), " ", HEX2DEC(RIGHT(MID(D2,2,6),2))), "")
+        </div>
+        
+        <h4>Fórmula para Preview (Coluna I):</h4>
+        <div class="formula">
+            =IF(D2<>"", "■", "")
+        </div>
+        
+        <p><strong>Como aplicar:</strong></p>
+        <ol>
+            <li>Digite a fórmula na célula E2</li>
+            <li>Arraste para baixo para aplicar a todas as linhas</li>
+            <li>Repita para a coluna I (preview)</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>🎯 Passo 5: Configurar Validação de Cores</h3>
+        
+        <h4>Google Apps Script para Validação Automática:</h4>
+        <div class="code">
+function validateHexColor(hex) {
+  return /^#[0-9A-F]{6,8}$/i.test(hex);
+}
+
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? 
+    `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}` : 
+    'Invalid';
+}
+
+function onEdit(e) {
+  const range = e.range;
+  const sheet = range.getSheet();
+  
+  if (sheet.getName() === 'Tokens' && range.getColumn() === 4) { // Coluna color_hex
+    const hexValue = range.getValue();
+    if (hexValue && !validateHexColor(hexValue)) {
+      range.setBackground('#ffcccc');
+    } else {
+      range.setBackground('#ffffff');
+    }
+  }
+}
+        </div>
+        
+        <p><strong>Como configurar:</strong></p>
+        <ol>
+            <li>Vá em Extensões → Apps Script</li>
+            <li>Cole o código acima</li>
+            <li>Salve o projeto</li>
+            <li>Autorize o script quando solicitado</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>📝 Passo 6: Preencher Dados Iniciais</h3>
+        
+        <p>Use os dados do template CSV como base:</p>
+        <div class="code">
+category,slug,tailwind_class,color_hex,color_rgb,name,description,status
+brand,brand-bg-base,bg-blue-700,#1d4ed8,29 78 216,Marca (fundo base),Cor de fundo principal da marca,active
+brand,brand-bg-alt,bg-green-600,#16a34a,22 163 74,Marca (fundo alternativo),Cor secundária da marca,active
+brand,brand-bg-accent,bg-red-600,#dc2626,220 38 38,Marca (fundo acento),Cor de destaque da marca,active
+background,bg-base,bg-white,#ffffff,255 255 255,Fundo base,Fundo principal do sistema,active
+background,bg-subtle,bg-gray-200,#e5e7eb,229 231 235,Fundo sutil,Fundo secundário do sistema,active
+text,text-base,text-gray-900,#111827,17 24 39,Texto base,Cor principal de texto,active
+text,text-subtle,text-gray-800,#1f2937,31 41 55,Texto sutil,Cor secundária de texto,active
+border,border-base,border-gray-400,#9ca3af,156 163 175,Borda base,Cor padrão de bordas,active
+button,button-base,bg-blue-600,#2563eb,37 99 235,Botão base,Cor principal de botões,active
+button,button-inverse,bg-transparent,#00000000,0 0 0 0,Botão inverso,Botão com fundo transparente,active
+state,bg-success,bg-green-200,#bbf7d0,187 247 208,Sucesso,Cor para estados de sucesso,active
+state,bg-warning,bg-yellow-200,#fef3c7,254 243 199,Aviso,Cor para estados de aviso,active
+state,bg-error,bg-red-200,#fecaca,254 202 202,Erro,Cor para estados de erro,active
+state,bg-info,bg-blue-200,#bfdbfe,191 219 254,Informação,Cor para estados informativos,active
+ui,card,bg-gray-250,#f9fafb,249 250 251,Card,Fundo para componentes de card,active
+        </div>
+    </div>
+
+    <div class="step">
+        <h3>💾 Passo 7: Exportar e Usar</h3>
+        
+        <ol>
+            <li><strong>Edite as cores</strong> conforme necessário</li>
+            <li><strong>Valide os dados</strong> usando as fórmulas automáticas</li>
+            <li><strong>Exporte como CSV:</strong> Arquivo → Fazer download → CSV</li>
+            <li><strong>Salve como:</strong> <code>semantic-tokens.csv</code> na raiz do projeto</li>
+            <li><strong>Valide o arquivo:</strong> <code>npm run semantic-colors -- --validate-csv</code></li>
+            <li><strong>Execute a conversão:</strong> <code>npm run semantic-colors</code></li>
+        </ol>
+    </div>
+
+    <div class="warning">
+        <h4>⚠️ Dicas Importantes:</h4>
+        <ul>
+            <li>Mantenha os <strong>slugs únicos</strong> - não duplique identificadores</li>
+            <li>Use <strong>formato hex válido</strong> (#RRGGBB ou #RRGGBBAA)</li>
+            <li>Mantenha o <strong>status como "active"</strong> para tokens em uso</li>
+            <li>Use <strong>descrições claras</strong> para facilitar manutenção</li>
+            <li><strong>Teste sempre</strong> com --validate-csv antes de usar</li>
+        </ul>
+    </div>
+
+    <div class="success">
+        <h4>✅ Benefícios do Google Sheets:</h4>
+        <ul>
+            <li><strong>Interface visual</strong> para edição de cores</li>
+            <li><strong>Validação automática</strong> de formato</li>
+            <li><strong>Colaboração em tempo real</strong> com equipe</li>
+            <li><strong>Histórico de versões</strong> automático</li>
+            <li><strong>Backup na nuvem</strong> (Google Drive)</li>
+            <li><strong>Fórmulas automáticas</strong> para conversões</li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <h3>🔗 Links Úteis</h3>
+        <ul>
+            <li><a href="https://sheets.google.com" target="_blank">Google Sheets</a></li>
+            <li><a href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">Color Picker</a></li>
+            <li><a href="https://coolors.co/" target="_blank">Coolors - Gerador de Paletas</a></li>
+            <li><a href="https://colorhunt.co/" target="_blank">Color Hunt - Paletas Prontas</a></li>
+        </ul>
+    </div>
+
+    <footer style="text-align: center; margin-top: 50px; padding: 20px; border-top: 1px solid #eee;">
+        <p>🎨 <strong>Semantic Colors Tool v0.2.0</strong> - Template Google Sheets</p>
+        <p>Para suporte, consulte a documentação do projeto</p>
+    </footer>
+</body>
+</html>
