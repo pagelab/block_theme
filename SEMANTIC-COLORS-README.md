@@ -1,6 +1,6 @@
 # 🎨 Sistema de Conversão Semântica de Cores
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](CHANGELOG.md)
 [![Status](https://img.shields.io/badge/status-Initial%20Beta-orange.svg)](#)
 [![Node](https://img.shields.io/badge/node-%3E%3D14.0.0-green.svg)](#)
 
@@ -349,7 +349,7 @@ SEMANTIC_PALETTE.push({
 
 Este projeto usa [Versionamento Semântico](https://semver.org/lang/pt-BR/):
 
-- **0.1.0** (Atual): Beta inicial com funcionalidades core
+- **0.1.1** (Atual): Beta inicial com versionamento e .gitignore
 - **0.2.x** (Planejado): Beta avançado com otimizações
 - **1.0.0** (Futuro): Versão estável com API consolidada
 

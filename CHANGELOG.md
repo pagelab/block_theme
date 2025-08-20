@@ -12,6 +12,27 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - Integração com build tools (Webpack, Vite)
 - Validação automática de sintaxe
 
+## [0.1.1] - 2025-08-20
+### Adicionado
+- **Versionamento SEMVER** - Sistema completo de versionamento semântico implementado
+- **Comando --version** - Flag para exibir informações detalhadas da versão
+- **Scripts NPM** - Comandos `npm run semantic-colors:version` e `npm run semantic-colors:help`
+- **Controle de versão Git** - .gitignore configurado para rastrear apenas arquivos do semantic-colors.js
+
+### Melhorado
+- **Documentação** - README atualizado com badges de versão e seção de versionamento
+- **CLI Help** - Comando de ajuda agora exibe a versão atual
+- **Logs** - Sistema de logs agora inclui versão da ferramenta nos metadados
+
+### Corrigido
+- **Duplicação prose variables** - Remoção de variáveis CSS `--tw-prose-*` duplicadas no tailwind.css
+- **Mapeamentos incorretos** - Correção manual de `.text-inverse` e `.brand-text-accent` para usar variáveis semânticas corretas
+
+### Técnico
+- **Git Cleanup** - Repositório limpo com apenas arquivos essenciais do semantic-colors.js
+- **Version Management** - Versão centralizada em `_tools/config/settings.js`
+- **Backup System** - Sistema de backup preserva versão da ferramenta nos metadados
+
 ## [0.1.0] - 2025-08-20
 ### Adicionado
 - **Script inicial de conversão semântica** - Ferramenta completa para converter classes Tailwind hardcoded em tokens semânticos
