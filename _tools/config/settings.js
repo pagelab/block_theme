@@ -6,9 +6,9 @@ const path = require('path');
 
 // Informações de versão
 const VERSION_INFO = {
-  VERSION: '0.1.1',
-  VERSION_NAME: 'Initial Beta',
-  RELEASE_DATE: '2025-08-20',
+  VERSION: '0.2.0',
+  VERSION_NAME: 'CSV Tokens Beta',
+  RELEASE_DATE: '2025-01-20',
   CHANGELOG_URL: 'https://github.com/repo/CHANGELOG.md',
   MINIMUM_NODE_VERSION: '14.0.0'
 };

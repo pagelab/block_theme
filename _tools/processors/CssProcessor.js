@@ -7,8 +7,8 @@
 
 const BaseProcessor = require('./BaseProcessor');
 const postcss = require('postcss');
+const TokenManager = require('../utils/TokenManager');
 const { 
-  SEMANTIC_COLOR_MAPPING, 
   PROSE_VARIABLE_MAPPING, 
   CSS_PATTERNS 
 } = require('../config/color-mapping');
@@ -17,7 +17,8 @@ const { chooseProcessingMethod } = require('../config/processing-matrix');
 class CssProcessor extends BaseProcessor {
   constructor(logger = null) {
     super(logger);
-    this.colorMapping = SEMANTIC_COLOR_MAPPING;
+    this.tokenManager = new TokenManager();
+    this.colorMapping = this.tokenManager.getTailwindMapping();
     this.proseMapping = PROSE_VARIABLE_MAPPING;
     this.patterns = CSS_PATTERNS;
     

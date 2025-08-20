@@ -1,6 +1,6 @@
 {
   "name": "block-theme-semantic-colors",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Script para converter classes Tailwind hardcoded em tokens semânticos para WordPress",
   "main": "_tools/semantic-colors.js",
   "scripts": {
@@ -22,12 +22,13 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "postcss": "^8.4.32",
+    "csv-parser": "^3.2.0",
     "fast-glob": "^3.3.2",
-    "fs-extra": "^11.2.0"
+    "fs-extra": "^11.2.0",
+    "postcss": "^8.4.32"
   },
   "devDependencies": {
-    "cssnano": "^6.0.3",
-    "@types/node": "^20.10.6"
+    "@types/node": "^20.10.6",
+    "cssnano": "^6.0.3"
   }
 }

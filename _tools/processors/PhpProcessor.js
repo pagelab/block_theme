@@ -6,13 +6,15 @@
  */
 
 const BaseProcessor = require('./BaseProcessor');
-const { SEMANTIC_COLOR_MAPPING, PHP_PATTERNS } = require('../config/color-mapping');
+const TokenManager = require('../utils/TokenManager');
+const { PHP_PATTERNS } = require('../config/color-mapping');
 const { chooseProcessingMethod } = require('../config/processing-matrix');
 
 class PhpProcessor extends BaseProcessor {
   constructor(logger = null) {
     super(logger);
-    this.colorMapping = SEMANTIC_COLOR_MAPPING;
+    this.tokenManager = new TokenManager();
+    this.colorMapping = this.tokenManager.getTailwindMapping();
     this.patterns = PHP_PATTERNS;
     
     // Contextos PHP válidos para modificação
