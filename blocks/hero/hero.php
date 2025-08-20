@@ -10,8 +10,8 @@
                 <h1 class="font-bold mb-6 text-4xl md:text-5xl"><?php echo PG_Blocks_v3::getAttribute( $args, 'heading' ) ?></h1> 
                 <p class="text-gray-700 mb-8" style="font-family:<?php echo PG_Blocks_v3::getAttribute( $args, 'font_family' ) ?>;"><?php echo PG_Blocks_v3::getAttribute( $args, 'description' ) ?></p> 
                 <div class="flex flex-wrap gap-4"> 
-                    <a href="<?php echo (!empty($_GET['context']) && $_GET['context'] === 'edit') ? 'javascript:void()' : PG_Blocks_v3::getLinkUrl( $args, 'primary_button_link' ) ?>" class="bg-blue-700 font-medium inline-block px-6 py-3 text-white"><?php echo PG_Blocks_v3::getAttribute( $args, 'primary_button_text' ) ?></a> 
-                    <a href="<?php echo (!empty($_GET['context']) && $_GET['context'] === 'edit') ? 'javascript:void()' : PG_Blocks_v3::getLinkUrl( $args, 'secondary_button_link' ) ?>" class="border border-gray-400 font-medium inline-block px-6 py-3"><?php echo PG_Blocks_v3::getAttribute( $args, 'secondary_button_text' ) ?></a> 
+                    <a href="<?php echo (!empty($_GET['context']) && $_GET['context'] === 'edit') ? 'javascript:void()' : PG_Blocks_v3::getLinkUrl( $args, 'primary_button_link' ) ?>" class="brand-bg-base font-medium inline-block px-6 py-3 text-inverse"><?php echo PG_Blocks_v3::getAttribute( $args, 'primary_button_text' ) ?></a> 
+                    <a href="<?php echo (!empty($_GET['context']) && $_GET['context'] === 'edit') ? 'javascript:void()' : PG_Blocks_v3::getLinkUrl( $args, 'secondary_button_link' ) ?>" class="border border-base font-medium inline-block px-6 py-3"><?php echo PG_Blocks_v3::getAttribute( $args, 'secondary_button_text' ) ?></a> 
                 </div> 
             </div> 
         </div> 

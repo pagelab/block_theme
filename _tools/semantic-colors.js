@@ -16,6 +16,9 @@ const fs = require('fs-extra');
 const path = require('path');
 const glob = require('fast-glob');
 
+// Importar configurações
+const { VERSION_INFO } = require('./config/settings');
+
 // Importar processadores
 const ThemeJsonProcessor = require('./processors/ThemeJsonProcessor');
 const CssProcessor = require('./processors/CssProcessor');
@@ -429,6 +432,15 @@ class SemanticColorsPipeline {
   parseArguments() {
     const args = process.argv.slice(2);
     
+    // Verificar flag de versão
+    if (args.includes('--version') || args.includes('-v')) {
+      console.log(`🎨 Semantic Colors Tool v${VERSION_INFO.VERSION} (${VERSION_INFO.VERSION_NAME})`);
+      console.log(`📅 Released: ${VERSION_INFO.RELEASE_DATE}`);
+      console.log(`📋 Changelog: ${VERSION_INFO.CHANGELOG_URL}`);
+      console.log(`⚙️  Node.js: ${VERSION_INFO.MINIMUM_NODE_VERSION}+ required`);
+      process.exit(0);
+    }
+    
     const options = {
       // Tipos de processamento
       all: !args.some(arg => ['--css', '--php', '--theme'].includes(arg)),
@@ -466,12 +478,16 @@ class SemanticColorsPipeline {
    * Mostrar ajuda
    */
   showHelp() {
-    console.log('🎨 Script de Conversão Semântica de Cores');
-    console.log('=========================================');
+    console.log(`🎨 Script de Conversão Semântica de Cores v${VERSION_INFO.VERSION}`);
+    console.log('=====================================================');
     console.log('');
     console.log('Uso: node _tools/semantic-colors.js [opções]');
     console.log('');
     console.log('Opções disponíveis:');
+    
+    // Adicionar flags básicas primeiro
+    console.log('  --version, -v   Exibir versão do script');
+    console.log('  --help, -h      Exibir esta ajuda');
     
     for (const [flag, description] of Object.entries(CLI_FLAGS)) {
       console.log(`  ${flag.padEnd(15)} ${description}`);

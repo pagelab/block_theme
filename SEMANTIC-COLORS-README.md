@@ -1,5 +1,9 @@
 # 🎨 Sistema de Conversão Semântica de Cores
 
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](CHANGELOG.md)
+[![Status](https://img.shields.io/badge/status-Initial%20Beta-orange.svg)](#)
+[![Node](https://img.shields.io/badge/node-%3E%3D14.0.0-green.svg)](#)
+
 ## Visão Geral
 
 Este sistema converte automaticamente classes CSS do Tailwind hardcoded em tokens semânticos controláveis via Global Styles do WordPress. O objetivo é permitir personalização completa de cores através da interface nativa do WordPress.
@@ -338,6 +342,25 @@ SEMANTIC_PALETTE.push({
 - [Pinegrow WordPress Builder](https://pinegrow.com/wordpress)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [PostCSS](https://postcss.org/)
+
+---
+
+## 📋 Versionamento
+
+Este projeto usa [Versionamento Semântico](https://semver.org/lang/pt-BR/):
+
+- **0.1.0** (Atual): Beta inicial com funcionalidades core
+- **0.2.x** (Planejado): Beta avançado com otimizações
+- **1.0.0** (Futuro): Versão estável com API consolidada
+
+### Verificar Versão
+```bash
+node _tools/semantic-colors.js --version
+npm run semantic-colors:version
+```
+
+### Histórico de Mudanças
+Consulte o [CHANGELOG.md](CHANGELOG.md) para ver todas as mudanças detalhadas.
 
 ---
 

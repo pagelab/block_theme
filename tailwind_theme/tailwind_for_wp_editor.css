@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Sora:100,200,300,400,500,600,700,800&display=swap');
 
-
-
 *,::before,::after {
   box-sizing: border-box;
 }
@@ -17,7 +15,7 @@ a {
           margin: 0;
           padding: 0;
         }
-        
+
         blockquote,
         dl,
         dd,
@@ -290,7 +288,7 @@ body :where(pre):not(:where([class~="not-prose"],[class~="not-prose"] *)){
   padding-inline-start: 1.1428571em;
 }
 body :where(pre code):not(:where([class~="not-prose"],[class~="not-prose"] *)){
-  background-color: transparent;
+  background-color: var(--wp--preset--color--button-inverse);
   border-width: 0;
   border-radius: 0;
   padding: 0;
@@ -355,42 +353,62 @@ body :where(figcaption):not(:where([class~="not-prose"],[class~="not-prose"] *))
   margin-top: 0.8571429em;
 }
 body{
-  --tw-prose-body: #374151;
-  --tw-prose-headings: #111827;
-  --tw-prose-lead: #4b5563;
-  --tw-prose-links: #111827;
-  --tw-prose-bold: #111827;
-  --tw-prose-counters: #6b7280;
-  --tw-prose-bullets: #d1d5db;
-  --tw-prose-hr: #e5e7eb;
-  --tw-prose-quotes: #111827;
-  --tw-prose-quote-borders: #e5e7eb;
-  --tw-prose-captions: #6b7280;
-  --tw-prose-kbd: #111827;
+  --tw-prose-body: var(--wp--preset--color--text-base);
+  --tw-prose-headings: var(--wp--preset--color--text-base);
+  --tw-prose-headings: color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-lead: var(--wp--preset--color--text-base);
+  --tw-prose-lead: color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-links: var(--wp--preset--color--link);
+  --tw-prose-bold: var(--wp--preset--color--text-base);
+  --tw-prose-counters: var(--wp--preset--color--text-base);
+  --tw-prose-bullets: var(--wp--preset--color--text-base);
+  --tw-prose-bullets: color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-hr: var(--wp--preset--color--border-subtle);
+  --tw-prose-quotes: var(--wp--preset--color--text-base);
+  --tw-prose-quotes: color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-quote-borders: var(--wp--preset--color--border-base);
+  --tw-prose-captions: var(--wp--preset--color--text-base);
+  --tw-prose-captions: color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-kbd: var(--wp--preset--color--text-base);
+  --tw-prose-kbd: color-mix(in srgb, var(--wp--preset--color--text-base) 60%, white);
   --tw-prose-kbd-shadows: 17 24 39;
-  --tw-prose-code: #111827;
-  --tw-prose-pre-code: #e5e7eb;
-  --tw-prose-pre-bg: #1f2937;
-  --tw-prose-th-borders: #d1d5db;
-  --tw-prose-td-borders: #e5e7eb;
-  --tw-prose-invert-body: #d1d5db;
-  --tw-prose-invert-headings: #fff;
-  --tw-prose-invert-lead: #9ca3af;
-  --tw-prose-invert-links: #fff;
-  --tw-prose-invert-bold: #fff;
-  --tw-prose-invert-counters: #9ca3af;
-  --tw-prose-invert-bullets: #4b5563;
-  --tw-prose-invert-hr: #374151;
-  --tw-prose-invert-quotes: #f3f4f6;
-  --tw-prose-invert-quote-borders: #374151;
-  --tw-prose-invert-captions: #9ca3af;
-  --tw-prose-invert-kbd: #fff;
+  --tw-prose-code: var(--wp--preset--color--text-base);
+  --tw-prose-code: color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-pre-code: var(--wp--preset--color--text-base);
+  --tw-prose-pre-code: color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-pre-bg: var(--wp--preset--color--bg-inverse);
+  --tw-prose-pre-bg: color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
+  --tw-prose-th-borders: var(--wp--preset--color--border-subtle);
+  --tw-prose-td-borders: var(--wp--preset--color--border-subtle);
+  --tw-prose-invert-body: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-headings: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-headings: color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-lead: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-lead: color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-links: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-links: color-mix(in srgb, var(--wp--preset--color--text-inverse) 60%, white);
+  --tw-prose-invert-bold: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-bold: color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-counters: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-counters: color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-bullets: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-bullets: color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-hr: var(--wp--preset--color--border-inverse-subtle);
+  --tw-prose-invert-quotes: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-quotes: color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-quote-borders: var(--wp--preset--color--border-inverse);
+  --tw-prose-invert-quote-borders: color-mix(in srgb, var(--wp--preset--color--text-inverse) 50%, white);
+  --tw-prose-invert-captions: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-captions: color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
+  --tw-prose-invert-kbd: var(--wp--preset--color--text-inverse);
   --tw-prose-invert-kbd-shadows: 255 255 255;
-  --tw-prose-invert-code: #fff;
-  --tw-prose-invert-pre-code: #d1d5db;
+  --tw-prose-invert-code: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-code: color-mix(in srgb, var(--wp--preset--color--text-inverse) 50%, white);
+  --tw-prose-invert-pre-code: var(--wp--preset--color--text-inverse);
+  --tw-prose-invert-pre-code: color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
   --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%);
-  --tw-prose-invert-th-borders: #4b5563;
-  --tw-prose-invert-td-borders: #374151;
+  --tw-prose-invert-th-borders: var(--wp--preset--color--border-inverse-subtle);
+  --tw-prose-invert-td-borders: var(--wp--preset--color--border-inverse-subtle);
   font-size: 1rem;
   line-height: 1.75;
 }
@@ -480,8 +498,7 @@ body{
   max-width: none;
 }
 pre:where(.editor-styles-wrapper *){
-  --tw-text-opacity: 1 !important;
-  color: rgb(249 250 251 / var(--tw-text-opacity)) !important;
+  color: var(--wp--preset--color--text-inverse) !important;
 }
 nav:where(.admin-bar *){
   top: var(--wp-admin--admin-bar--height);
@@ -733,8 +750,8 @@ nav:where(.admin-bar *){
 .overflow-hidden{
   overflow: hidden;
 }
-.whitespace-nowrap{
-  white-space: nowrap;
+.var(--wp--preset--color--bg-base)space-nowrap{
+  var(--wp--preset--color--bg-base)-space: nowrap;
 }
 .rounded{
   border-radius: 0.25rem;
@@ -758,91 +775,68 @@ nav:where(.admin-bar *){
   border-top-width: 1px;
 }
 .border-black{
-  --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
 }
 .border-gray-200{
-  --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  border-color: var(--wp--preset--color--bg-subtle);
 }
 .border-gray-300{
-  --tw-border-opacity: 1;
-  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+  border-color: var(--wp--preset--color--text-inverse-subtle);
 }
-.border-gray-400{
-  --tw-border-opacity: 1;
-  border-color: rgb(156 163 175 / var(--tw-border-opacity));
-}
+.border-base{border-color: var(--wp--preset--color--border-base);}
 .border-gray-500{
-  --tw-border-opacity: 1;
   border-color: rgb(107 114 128 / var(--tw-border-opacity));
 }
-.border-white{
-  --tw-border-opacity: 1;
-  border-color: rgb(255 255 255 / var(--tw-border-opacity));
+.border-var(--wp--preset--color--bg-base){
+  border-color: var(--wp--preset--color--bg-base);
 }
 .bg-black{
-  --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 .bg-blue-100{
-  --tw-bg-opacity: 1;
   background-color: rgb(219 234 254 / var(--tw-bg-opacity));
 }
-.bg-blue-600{
-  --tw-bg-opacity: 1;
-  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+.button-base{
+  background-color: var(--wp--preset--color--button-base);
 }
-.bg-blue-700{
-  --tw-bg-opacity: 1;
-  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+.brand-bg-base{
+  background-color: var(--wp--preset--color--brand-bg-base);
 }
 .bg-gray-100{
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  background-color: var(--wp--preset--color--card);
 }
-.bg-gray-200{
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+.bg-subtle{
+  background-color: var(--wp--preset--color--bg-subtle);
 }
 .bg-gray-50{
-  --tw-bg-opacity: 1;
-  background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+  background-color: var(--wp--preset--color--text-inverse);
 }
 .bg-gray-700{
-  --tw-bg-opacity: 1;
   background-color: rgb(55 65 81 / var(--tw-bg-opacity));
 }
 .bg-gray-800{
-  --tw-bg-opacity: 1;
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+  background-color: var(--wp--preset--color--text-subtle);
 }
-.bg-gray-900{
-  --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+.bg-inverse-subtle{
+  background-color: var(--wp--preset--color--text-base);
 }
 .bg-green-100{
-  --tw-bg-opacity: 1;
   background-color: rgb(209 250 229 / var(--tw-bg-opacity));
 }
 .bg-purple-100{
-  --tw-bg-opacity: 1;
   background-color: rgb(237 233 254 / var(--tw-bg-opacity));
 }
 .bg-red-100{
-  --tw-bg-opacity: 1;
   background-color: rgb(254 226 226 / var(--tw-bg-opacity));
 }
-.bg-transparent{
-  background-color: transparent;
+.button-inverse{
+  background-color: var(--wp--preset--color--button-inverse);
 }
-.bg-white{
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+.bg-base{
+  background-color: var(--wp--preset--color--bg-base);
 }
 .bg-opacity-50{
-  --tw-bg-opacity: 0.5;
-}
+  }
 .object-cover{
   -o-object-fit: cover;
      object-fit: cover;
@@ -966,64 +960,49 @@ nav:where(.admin-bar *){
   line-height: 1.625;
 }
 .text-black{
-  --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 .text-blue-400{
-  --tw-text-opacity: 1;
   color: rgb(96 165 250 / var(--tw-text-opacity));
 }
 .text-blue-600{
-  --tw-text-opacity: 1;
-  color: rgb(37 99 235 / var(--tw-text-opacity));
+  color: var(--wp--preset--color--button-base);
 }
 .text-gray-200{
-  --tw-text-opacity: 1;
-  color: rgb(229 231 235 / var(--tw-text-opacity));
+  color: var(--wp--preset--color--bg-subtle);
 }
 .text-gray-400{
-  --tw-text-opacity: 1;
-  color: rgb(156 163 175 / var(--tw-text-opacity));
+  color: var(--wp--preset--color--border-base);
 }
-.text-gray-500{
-  --tw-text-opacity: 1;
+.text-inverse0{
   color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 .text-gray-600{
-  --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
 }
 .text-gray-700{
-  --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
 }
-.text-gray-800{
-  --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+.text-subtle{
+  color: var(--wp--preset--color--text-subtle);
 }
 .text-green-500{
-  --tw-text-opacity: 1;
   color: rgb(16 185 129 / var(--tw-text-opacity));
 }
-.text-green-600{
-  --tw-text-opacity: 1;
+.brand-text-alt{
   color: rgb(5 150 105 / var(--tw-text-opacity));
 }
 .text-primary-600{
-  --tw-text-opacity: 1;
   color: rgb(225 65 98 / var(--tw-text-opacity));
 }
 .text-purple-600{
-  --tw-text-opacity: 1;
   color: rgb(124 58 237 / var(--tw-text-opacity));
 }
-.text-red-600{
-  --tw-text-opacity: 1;
-  color: rgb(220 38 38 / var(--tw-text-opacity));
+.brand-text-accent{
+  color: var(--wp--preset--color--brand-bg-accent);
 }
-.text-white{
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+.text-inverse{
+  color: var(--wp--preset--color--bg-base);
 }
 .shadow-lg{
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -1066,54 +1045,41 @@ nav:where(.admin-bar *){
   transition-duration: 300ms;
 }
 
-
-                    
 /* Class styles components */                    
 body, html {
     min-height: 100vh;
 }                    
 .hover\:bg-blue-700:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+  background-color: var(--wp--preset--color--brand-bg-base);
 }                    
 .hover\:bg-gray-100:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+  background-color: var(--wp--preset--color--card);
 }                    
 .hover\:bg-gray-600:hover{
-  --tw-bg-opacity: 1;
   background-color: rgb(75 85 99 / var(--tw-bg-opacity));
 }                    
 .hover\:bg-gray-700:hover{
-  --tw-bg-opacity: 1;
   background-color: rgb(55 65 81 / var(--tw-bg-opacity));
 }                    
 .hover\:bg-gray-800:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+  background-color: var(--wp--preset--color--text-subtle);
 }                    
 .hover\:bg-primary-700:hover{
-  --tw-bg-opacity: 1;
   background-color: rgb(199 58 87 / var(--tw-bg-opacity));
 }                    
-.hover\:bg-white:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+.hover\:bg-var(--wp--preset--color--bg-base):hover{
+  background-color: var(--wp--preset--color--bg-base);
 }                    
 .hover\:text-gray-200:hover{
-  --tw-text-opacity: 1;
-  color: rgb(229 231 235 / var(--tw-text-opacity));
+  color: var(--wp--preset--color--bg-subtle);
 }                    
 .hover\:text-gray-800:hover{
-  --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
+  color: var(--wp--preset--color--text-subtle);
 }                    
 .hover\:text-primary-600:hover{
-  --tw-text-opacity: 1;
   color: rgb(225 65 98 / var(--tw-text-opacity));
 }                    
 .hover\:text-primary-700:hover{
-  --tw-text-opacity: 1;
   color: rgb(199 58 87 / var(--tw-text-opacity));
 }                    
 .hover\:underline:hover{
@@ -1125,11 +1091,10 @@ body, html {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }                    
 .focus\:border-primary-500:focus{
-  --tw-border-opacity: 1;
   border-color: rgb(252 73 110 / var(--tw-border-opacity));
 }                    
 .focus\:outline-none:focus{
-  outline: 2px solid transparent;
+  outline: 2px solid var(--wp--preset--color--button-inverse);
   outline-offset: 2px;
 }                    
 .focus\:ring-1:focus{
@@ -1138,14 +1103,13 @@ body, html {
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }                    
 .focus\:ring-primary-500:focus{
-  --tw-ring-opacity: 1;
   --tw-ring-color: rgb(252 73 110 / var(--tw-ring-opacity));
 }                    
 .focus-visible\:outline-2:focus-visible{
   outline-width: 2px;
 }                    
-.focus-visible\:outline-white:focus-visible{
-  outline-color: #fff;
+.focus-visible\:outline-var(--wp--preset--color--bg-base):focus-visible{
+  outline-color: var(--wp--preset--color--bg-base);
 }                    
 .active\:scale-95:active{
   --tw-scale-x: .95;
@@ -1231,16 +1195,12 @@ body, html {
     font-size: 1.875rem;
     line-height: 2.25rem;
   }.xl\:text-gray-600{
-    --tw-text-opacity: 1;
     color: rgb(75 85 99 / var(--tw-text-opacity));
   }.xl\:hover\:bg-gray-900:hover{
-    --tw-bg-opacity: 1;
-    background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+    background-color: var(--wp--preset--color--text-base);
   }.xl\:hover\:text-gray-600:hover{
-    --tw-text-opacity: 1;
     color: rgb(75 85 99 / var(--tw-text-opacity));
   }.xl\:hover\:text-gray-700:hover{
-    --tw-text-opacity: 1;
     color: rgb(55 65 81 / var(--tw-text-opacity));
   }
 }

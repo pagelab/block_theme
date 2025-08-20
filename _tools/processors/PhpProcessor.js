@@ -192,20 +192,22 @@ class PhpProcessor extends BaseProcessor {
     const beforeContext = content.substring(Math.max(0, offset - 200), offset);
     const afterContext = content.substring(offset, Math.min(content.length, offset + 200));
     
-    // Verificar se está dentro de PHP code
+    // Verificar se está dentro de PHP code (verificação mais robusta)
     const lastPhpOpen = beforeContext.lastIndexOf('<?php');
     const lastPhpClose = beforeContext.lastIndexOf('?>');
     
-    // Se está em seção PHP, não processar
-    if (lastPhpOpen > lastPhpClose) {
-      return false;
+    // Se está em seção PHP pura, não processar
+    if (lastPhpOpen > lastPhpClose && lastPhpOpen > -1) {
+      // Verificar se não é uma string PHP ou atributo HTML dentro do PHP
+      const afterPhpOpen = beforeContext.substring(lastPhpOpen);
+      // Se não contém aspas ou HTML, provavelmente é PHP puro
+      if (!afterPhpOpen.includes('"') && !afterPhpOpen.includes("'") && !afterPhpOpen.includes('<')) {
+        return false;
+      }
     }
 
-    // Verificar se está em HTML/template válido
-    const htmlTagPattern = /<[^>]*\sclass\s*=/;
-    const nearbyHtml = beforeContext + afterContext;
-    
-    return htmlTagPattern.test(nearbyHtml);
+    // Sempre processar se está em HTML/template (mais permissivo)
+    return true;
   }
 
   /**

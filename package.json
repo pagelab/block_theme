@@ -1,13 +1,16 @@
 {
   "name": "block-theme-semantic-colors",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Script para converter classes Tailwind hardcoded em tokens semânticos para WordPress",
   "main": "_tools/semantic-colors.js",
   "scripts": {
     "semantic-colors": "node _tools/semantic-colors.js",
     "semantic-colors:css": "node _tools/semantic-colors.js --css",
     "semantic-colors:php": "node _tools/semantic-colors.js --php",
-    "semantic-colors:theme": "node _tools/semantic-colors.js --theme"
+    "semantic-colors:theme": "node _tools/semantic-colors.js --theme",
+    "semantic-colors:dry-run": "node _tools/semantic-colors.js --dry-run",
+    "semantic-colors:version": "node _tools/semantic-colors.js --version",
+    "semantic-colors:help": "node _tools/semantic-colors.js --help"
   },
   "keywords": [
     "wordpress",

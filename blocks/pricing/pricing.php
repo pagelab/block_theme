@@ -61,7 +61,7 @@
         </div>
         
         <div class="mt-auto">
-          <a href="#" class="block w-full bg-black text-white text-center py-3 rounded hover:bg-gray-800 transition"><?php _e( 'Get started', 'block_theme' ); ?></a>
+          <a href="#" class="block w-full bg-black text-inverse text-center py-3 rounded hover:bg-gray-800 transition"><?php _e( 'Get started', 'block_theme' ); ?></a>
         </div>
       </div>
       
@@ -119,7 +119,7 @@
 </div>
         
         <div class="mt-auto">
-          <a href="#" class="block w-full bg-black text-white text-center py-3 rounded hover:bg-gray-800 transition"><?php _e( 'Get started', 'block_theme' ); ?></a>
+          <a href="#" class="block w-full bg-black text-inverse text-center py-3 rounded hover:bg-gray-800 transition"><?php _e( 'Get started', 'block_theme' ); ?></a>
         </div>
       </div>
     </div>

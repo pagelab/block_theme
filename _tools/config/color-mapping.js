@@ -26,10 +26,12 @@ const SEMANTIC_COLOR_MAPPING = {
   'text-gray-800': 'text-subtle',
   'text-gray-50': 'text-inverse',
   'text-gray-300': 'text-inverse-subtle',
+  'text-white': 'text-inverse',
 
   // Cores de borda
   'border-gray-400': 'border-base',
   'border-gray-150': 'border-subtle',
+  'border-base': 'border-base', // Mapear classe semântica para ela mesma
 
   // Cores de feedback
   'bg-green-200': 'bg-success',

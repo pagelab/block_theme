@@ -111,8 +111,14 @@ class CssProcessor extends BaseProcessor {
       processed = this.replaceColorValues(processed, tailwindClass, semanticToken);
     }
 
-    // Remover referências a --tw-bg-opacity
-    processed = processed.replace(/--tw-bg-opacity:\s*[^;]+;/g, '');
+    // Substituir valores RGB hardcoded por variáveis semânticas globalmente
+    processed = this.replaceHardcodedValues(processed);
+
+    // Remover todas as variáveis de opacidade do Tailwind
+    processed = processed.replace(/--tw-[\w-]*-opacity:\s*[^;]+;?\s*/g, '');
+    
+    // Remover linhas vazias resultantes
+    processed = processed.replace(/^\s*$/gm, '').replace(/\n{3,}/g, '\n\n');
 
     return processed;
   }
@@ -134,6 +140,9 @@ class CssProcessor extends BaseProcessor {
     // Processar classes de borda
     processed = await this.processBorderClasses(processed);
 
+    // Substituir valores RGB hardcoded por variáveis semânticas globalmente
+    processed = this.replaceHardcodedValues(processed);
+
     // Remover --tw-bg-opacity
     processed = this.removeTailwindOpacity(processed);
 
@@ -148,7 +157,12 @@ class CssProcessor extends BaseProcessor {
   async processWithPostcss(content) {
     try {
       const result = await this.postcssProcessor.process(content, { from: undefined });
-      return result.css;
+      let processed = result.css;
+      
+      // Substituir valores RGB hardcoded por variáveis semânticas globalmente
+      processed = this.replaceHardcodedValues(processed);
+      
+      return processed;
     } catch (error) {
       this.log('error', 'Erro no PostCSS', error);
       // Fallback para regex
@@ -204,16 +218,19 @@ class CssProcessor extends BaseProcessor {
       const semanticToken = this.colorMapping[tailwindClass];
       
       if (semanticToken) {
-        // Substituir nome da classe
-        const newStyles = styles.replace(
+        // Substituir nome da classe e propriedades
+        let newStyles = styles.replace(
           /background-color:\s*[^;]+;/g,
           `background-color: var(--wp--preset--color--${semanticToken});`
         );
         
-        // Remover --tw-bg-opacity
-        const cleanStyles = newStyles.replace(/--tw-bg-opacity:\s*[^;]+;/g, '');
+        // Remover todas as variáveis de opacidade do Tailwind
+        newStyles = newStyles.replace(/--tw-[\w-]*-opacity:\s*[^;]+;\s*/g, '');
         
-        return `.${semanticToken}{${cleanStyles}}`;
+        // Limpar espaços extras
+        newStyles = newStyles.replace(/\s+/g, ' ').trim();
+        
+        return `.${semanticToken}{${newStyles}}`;
       }
       
       return match;
@@ -233,10 +250,16 @@ class CssProcessor extends BaseProcessor {
       const semanticToken = this.colorMapping[tailwindClass];
       
       if (semanticToken) {
-        const newStyles = styles.replace(
+        let newStyles = styles.replace(
           /color:\s*[^;]+;/g,
           `color: var(--wp--preset--color--${semanticToken});`
         );
+        
+        // Remover todas as variáveis de opacidade do Tailwind
+        newStyles = newStyles.replace(/--tw-[\w-]*-opacity:\s*[^;]+;\s*/g, '');
+        
+        // Limpar espaços extras
+        newStyles = newStyles.replace(/\s+/g, ' ').trim();
         
         return `.${semanticToken}{${newStyles}}`;
       }
@@ -258,10 +281,16 @@ class CssProcessor extends BaseProcessor {
       const semanticToken = this.colorMapping[tailwindClass];
       
       if (semanticToken) {
-        const newStyles = styles.replace(
+        let newStyles = styles.replace(
           /border-color:\s*[^;]+;/g,
           `border-color: var(--wp--preset--color--${semanticToken});`
         );
+        
+        // Remover todas as variáveis de opacidade do Tailwind
+        newStyles = newStyles.replace(/--tw-[\w-]*-opacity:\s*[^;]+;\s*/g, '');
+        
+        // Limpar espaços extras
+        newStyles = newStyles.replace(/\s+/g, ' ').trim();
         
         return `.${semanticToken}{${newStyles}}`;
       }
@@ -306,9 +335,43 @@ class CssProcessor extends BaseProcessor {
    * @returns {string} Conteúdo processado
    */
   removeTailwindOpacity(content) {
-    // Remover --tw-bg-opacity, --tw-text-opacity, etc.
-    const opacityRegex = this.getCachedRegex('--tw-[\\w-]*-opacity:\\s*[^;]+;\\s*', 'g');
-    return content.replace(opacityRegex, '');
+    // Remover --tw-bg-opacity, --tw-text-opacity, etc. (mais robusta)
+    let processed = content;
+    
+    // Padrões específicos para diferentes casos
+    const opacityPatterns = [
+      /--tw-bg-opacity:\s*[^;]+;?\s*/g,
+      /--tw-text-opacity:\s*[^;]+;?\s*/g,
+      /--tw-border-opacity:\s*[^;]+;?\s*/g,
+      /--tw-ring-opacity:\s*[^;]+;?\s*/g,
+      /--tw-shadow-opacity:\s*[^;]+;?\s*/g,
+      /--tw-[\w-]*-opacity:\s*[^;]+;?\s*/g  // Catch-all
+    ];
+    
+    for (const pattern of opacityPatterns) {
+      processed = processed.replace(pattern, '');
+    }
+
+    // Remover valores rgb() que ainda usam var(--tw-*-opacity)
+    processed = processed.replace(
+      /rgb\([^)]+\s*\/\s*var\(--tw-[\w-]*-opacity\)\)/g,
+      (match) => {
+        // Log de debug
+        this.log('debug', `Removendo valor RGB com opacidade: ${match}`);
+        // Extrair valores RGB e retornar apenas eles
+        const rgbMatch = match.match(/rgb\((\d+\s+\d+\s+\d+|\d+,\s*\d+,\s*\d+)\)/);
+        if (rgbMatch) {
+          return `rgb(${rgbMatch[1]})`;
+        }
+        return match;
+      }
+    );
+    
+    // Limpar linhas vazias e espaços excessivos
+    processed = processed.replace(/^\s*[\r\n]/gm, '');
+    processed = processed.replace(/\n{3,}/g, '\n\n');
+    
+    return processed;
   }
 
   /**
@@ -319,21 +382,156 @@ class CssProcessor extends BaseProcessor {
    * @returns {string} Conteúdo processado
    */
   replaceColorValues(content, tailwindClass, semanticToken) {
-    // Mapear tipo de propriedade baseado na classe
-    let property;
-    if (tailwindClass.startsWith('bg-')) {
-      property = 'background-color';
-    } else if (tailwindClass.startsWith('text-')) {
-      property = 'color';
-    } else if (tailwindClass.startsWith('border-')) {
-      property = 'border-color';
-    } else {
-      return content;
+    // Substituir valor da propriedade dentro do contexto da classe específica
+    const classRegex = this.getCachedRegex(`\\.${this.escapeRegex(tailwindClass)}\\s*{([^}]*)}`, 'g');
+    
+    return content.replace(classRegex, (match, styles) => {
+      let newStyles = styles;
+      
+      // Substituir propriedades de cor por variáveis semânticas
+      if (tailwindClass.startsWith('bg-')) {
+        newStyles = newStyles.replace(
+          /background-color:\s*[^;]+;/g,
+          `background-color: var(--wp--preset--color--${semanticToken});`
+        );
+      } else if (tailwindClass.startsWith('text-')) {
+        newStyles = newStyles.replace(
+          /color:\s*[^;]+;/g,
+          `color: var(--wp--preset--color--${semanticToken});`
+        );
+      } else if (tailwindClass.startsWith('border-')) {
+        newStyles = newStyles.replace(
+          /border-color:\s*[^;]+;/g,
+          `border-color: var(--wp--preset--color--${semanticToken});`
+        );
+      }
+      
+      // Remover variáveis de opacidade
+      newStyles = newStyles.replace(/--tw-[\w-]*-opacity:\s*[^;]+;\s*/g, '');
+      
+      // Limpar espaços extras
+      newStyles = newStyles.replace(/\s+/g, ' ').trim();
+      
+      return `.${semanticToken}{${newStyles}}`;
+    });
+  }
+
+  /**
+   * Substituir valores RGB hardcoded por variáveis semânticas globalmente
+   * @param {string} content - Conteúdo CSS
+   * @returns {string} Conteúdo processado
+   */
+  replaceHardcodedValues(content) {
+    // Mapeamento de valores RGB para variáveis semânticas baseado na SEMANTIC_PALETTE
+    const rgbToSemanticMapping = {
+      // Cores da marca
+      'rgb(29 78 216)': 'var(--wp--preset--color--brand-bg-base)',
+      'rgb(29,78,216)': 'var(--wp--preset--color--brand-bg-base)',
+      'rgba(29,78,216,1)': 'var(--wp--preset--color--brand-bg-base)',
+      
+      'rgb(22 163 74)': 'var(--wp--preset--color--brand-bg-alt)',
+      'rgb(22,163,74)': 'var(--wp--preset--color--brand-bg-alt)',
+      'rgba(22,163,74,1)': 'var(--wp--preset--color--brand-bg-alt)',
+      
+      'rgb(220 38 38)': 'var(--wp--preset--color--brand-bg-accent)',
+      'rgb(220,38,38)': 'var(--wp--preset--color--brand-bg-accent)',
+      'rgba(220,38,38,1)': 'var(--wp--preset--color--brand-bg-accent)',
+
+      // Cores de fundo
+      'rgb(255 255 255)': 'var(--wp--preset--color--bg-base)',
+      'rgb(255,255,255)': 'var(--wp--preset--color--bg-base)',
+      'rgba(255,255,255,1)': 'var(--wp--preset--color--bg-base)',
+      '#ffffff': 'var(--wp--preset--color--bg-base)',
+      '#fff': 'var(--wp--preset--color--bg-base)',
+      'white': 'var(--wp--preset--color--bg-base)',
+      
+      'rgb(229 231 235)': 'var(--wp--preset--color--bg-subtle)',
+      'rgb(229,231,235)': 'var(--wp--preset--color--bg-subtle)',
+      'rgba(229,231,235,1)': 'var(--wp--preset--color--bg-subtle)',
+      
+      'rgb(3 7 18)': 'var(--wp--preset--color--bg-inverse)',
+      'rgb(3,7,18)': 'var(--wp--preset--color--bg-inverse)',
+      'rgba(3,7,18,1)': 'var(--wp--preset--color--bg-inverse)',
+      
+      'rgb(17 24 39)': 'var(--wp--preset--color--bg-inverse-subtle)',
+      'rgb(17,24,39)': 'var(--wp--preset--color--bg-inverse-subtle)',
+      'rgba(17,24,39,1)': 'var(--wp--preset--color--bg-inverse-subtle)',
+
+      // Cores de texto
+      'rgb(17 24 39)': 'var(--wp--preset--color--text-base)',
+      'rgb(17,24,39)': 'var(--wp--preset--color--text-base)',
+      
+      'rgb(31 41 55)': 'var(--wp--preset--color--text-subtle)',
+      'rgb(31,41,55)': 'var(--wp--preset--color--text-subtle)',
+      'rgba(31,41,55,1)': 'var(--wp--preset--color--text-subtle)',
+      
+      'rgb(249 250 251)': 'var(--wp--preset--color--text-inverse)',
+      'rgb(249,250,251)': 'var(--wp--preset--color--text-inverse)',
+      'rgba(249,250,251,1)': 'var(--wp--preset--color--text-inverse)',
+      
+      'rgb(209 213 219)': 'var(--wp--preset--color--text-inverse-subtle)',
+      'rgb(209,213,219)': 'var(--wp--preset--color--text-inverse-subtle)',
+      'rgba(209,213,219,1)': 'var(--wp--preset--color--text-inverse-subtle)',
+
+      // Cores de borda
+      'rgb(156 163 175)': 'var(--wp--preset--color--border-base)',
+      'rgb(156,163,175)': 'var(--wp--preset--color--border-base)',
+      'rgba(156,163,175,1)': 'var(--wp--preset--color--border-base)',
+
+      // Cores de feedback
+      'rgb(187 247 208)': 'var(--wp--preset--color--bg-success)',
+      'rgb(187,247,208)': 'var(--wp--preset--color--bg-success)',
+      'rgba(187,247,208,1)': 'var(--wp--preset--color--bg-success)',
+      
+      'rgb(254 240 138)': 'var(--wp--preset--color--bg-warning)',
+      'rgb(254,240,138)': 'var(--wp--preset--color--bg-warning)',
+      'rgba(254,240,138,1)': 'var(--wp--preset--color--bg-warning)',
+      
+      'rgb(254 202 202)': 'var(--wp--preset--color--bg-error)',
+      'rgb(254,202,202)': 'var(--wp--preset--color--bg-error)',
+      'rgba(254,202,202,1)': 'var(--wp--preset--color--bg-error)',
+      
+      'rgb(191 219 254)': 'var(--wp--preset--color--bg-info)',
+      'rgb(191,219,254)': 'var(--wp--preset--color--bg-info)',
+      'rgba(191,219,254,1)': 'var(--wp--preset--color--bg-info)',
+
+      // Cores de elementos
+      'rgb(37 99 235)': 'var(--wp--preset--color--button-base)',
+      'rgb(37,99,235)': 'var(--wp--preset--color--button-base)',
+      'rgba(37,99,235,1)': 'var(--wp--preset--color--button-base)',
+      
+      'rgba(0,0,0,0)': 'var(--wp--preset--color--button-inverse)',
+      'transparent': 'var(--wp--preset--color--button-inverse)',
+      
+      'rgb(239 68 68)': 'var(--wp--preset--color--button-accent)',
+      'rgb(239,68,68)': 'var(--wp--preset--color--button-accent)',
+      'rgba(239,68,68,1)': 'var(--wp--preset--color--button-accent)',
+      
+      'rgb(243 244 246)': 'var(--wp--preset--color--card)',
+      'rgb(243,244,246)': 'var(--wp--preset--color--card)',
+      'rgba(243,244,246,1)': 'var(--wp--preset--color--card)'
+    };
+
+    let processed = content;
+
+    // Substituir valores RGB por variáveis semânticas
+    for (const [rgbValue, semanticVar] of Object.entries(rgbToSemanticMapping)) {
+      // Escapar caracteres especiais para regex
+      const escapedRgb = rgbValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const rgbRegex = new RegExp(escapedRgb, 'g');
+      processed = processed.replace(rgbRegex, semanticVar);
     }
 
-    // Substituir valor da propriedade
-    const propertyRegex = this.getCachedRegex(`${property}:\\s*[^;]+;`, 'g');
-    return content.replace(propertyRegex, `${property}: var(--wp--preset--color--${semanticToken});`);
+    // Substituir valores RGB com var(--tw-bg-opacity) por variáveis semânticas
+    processed = processed.replace(
+      /rgb\((\d+)\s+(\d+)\s+(\d+)\s*\/\s*var\(--tw-[\w-]*-opacity\)\)/g,
+      (match, r, g, b) => {
+        const rgbValue = `rgb(${r} ${g} ${b})`;
+        return rgbToSemanticMapping[rgbValue] || match;
+      }
+    );
+
+    return processed;
   }
 
   /**
@@ -342,13 +540,11 @@ class CssProcessor extends BaseProcessor {
    * @returns {string} Valor convertido
    */
   convertColorValue(value) {
-    // Procurar por rgb/rgba que correspondam às cores Tailwind
-    // Esta é uma implementação simplificada
+    // Este método é mantido para compatibilidade com PostCSS
     const colorMap = {
       'rgb(29 78 216)': 'var(--wp--preset--color--brand-bg-base)',
       'rgb(22 163 74)': 'var(--wp--preset--color--brand-bg-alt)',
       'rgb(220 38 38)': 'var(--wp--preset--color--brand-bg-accent)',
-      // Adicionar mais mapeamentos conforme necessário
     };
 
     return colorMap[value] || value;

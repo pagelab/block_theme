@@ -3,7 +3,7 @@
     <div class="flex flex-col overflow-hidden rounded-xl shadow-lg lg:flex-row">
       <!-- Left Column (60%) -->
       <div class="bg-gray-700 p-8 md:p-10 lg:w-3/5">
-        <h2 class="text-white text-xl font-semibold mb-6"><?php _e( 'Choose a pricing plan:', 'block_theme' ); ?></h2>
+        <h2 class="text-inverse text-xl font-semibold mb-6"><?php _e( 'Choose a pricing plan:', 'block_theme' ); ?></h2>
         
         <!-- Tab Navigation -->
         <div role="tablist" class="flex flex-wrap md:flex-nowrap mb-10 rounded-lg overflow-hidden">
@@ -16,14 +16,14 @@
           <button role="tab" aria-selected="false" class="flex-1 py-4 px-2 bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200 transition-colors focus-visible:outline-white focus-visible:outline-2">
             <?php _e( 'Premium', 'block_theme' ); ?>
           </button>
-          <button role="tab" aria-selected="true" class="flex-1 py-4 px-2 bg-gray-700 text-white font-bold border border-gray-500 hover:bg-gray-600 transition-colors focus-visible:outline-white focus-visible:outline-2">
+          <button role="tab" aria-selected="true" class="flex-1 py-4 px-2 bg-gray-700 text-inverse font-bold border border-gray-500 hover:bg-gray-600 transition-colors focus-visible:outline-white focus-visible:outline-2">
             <?php _e( 'Enterprise', 'block_theme' ); ?>
           </button>
         </div>
         
         <!-- Tab Content -->
         <div role="tabpanel" class="space-y-4">
-          <h3 class="text-white text-lg font-semibold"><?php _e( 'Enterprise details:', 'block_theme' ); ?></h3>
+          <h3 class="text-inverse text-lg font-semibold"><?php _e( 'Enterprise details:', 'block_theme' ); ?></h3>
           <p class="text-gray-400 text-sm leading-relaxed">
             <?php _e( 'Plan pricing starts at unlimited contacts. Select your audience size to calculate your price.', 'block_theme' ); ?> 
             <?php _e( 'The monthly email send limit for Standard plans is 12 times your maximum contact count.*', 'block_theme' ); ?>
@@ -33,14 +33,14 @@
       
       <!-- Right Column (40%) -->
       <div class="bg-gray-700 flex flex-col p-8 md:p-10 lg:w-2/5">
-        <h3 class="font-semibold mb-8 text-2xl text-white xl:text-3xl"><?php _e( 'Enterprise plan', 'block_theme' ); ?></h3>
+        <h3 class="font-semibold mb-8 text-2xl text-inverse xl:text-3xl"><?php _e( 'Enterprise plan', 'block_theme' ); ?></h3>
         
         <div class="mb-6">
           <p class="mb-2 text-gray-400 text-sm"><?php _e( 'Starts at', 'block_theme' ); ?></p>
-          <p class="text-white text-5xl md:text-6xl font-bold"><?php _e( '$249', 'block_theme' ); ?></p>
+          <p class="text-inverse text-5xl md:text-6xl font-bold"><?php _e( '$249', 'block_theme' ); ?></p>
         </div>
         
-        <button class="bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 active:scale-95 transition-all mb-4">
+        <button class="button-base text-inverse py-3 px-6 rounded-lg font-medium hover:bg-blue-700 active:scale-95 transition-all mb-4">
           <?php _e( 'Buy now', 'block_theme' ); ?>
         </button>
         

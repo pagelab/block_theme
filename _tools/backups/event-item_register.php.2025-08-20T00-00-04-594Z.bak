@@ -1,0 +1,54 @@
+<?php
+
+        PG_Blocks_v3::register_block_type( array(
+            'name' => 'block-theme/event-item',
+            'title' => __( 'Event Item', 'block_theme' ),
+            'render_template' => 'blocks/event-item/event-item.php',
+            'supports' => array(),
+            'base_url' => get_template_directory_uri(),
+            'base_path' => get_template_directory(),
+            'js_file' => 'blocks/event-item/event-item.js',
+            'attributes' => array(
+                'event_image' => array(
+                    'type' => array('object', 'null'),
+                    'default' => array('id' => 0, 'url' => '', 'size' => '', 'svg' => '', 'alt' => null)
+                ),
+                'event_icon' => array(
+                    'type' => array('object', 'null'),
+                    'default' => array('id' => 0, 'url' => '', 'size' => '', 'svg' => '<svg class="h-12 w-12 text-gray-400" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/> </svg>', 'alt' => null)
+                ),
+                'event_title' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Event title heading'
+                ),
+                'heading_color' => array(
+                    'type' => array('string', 'null'),
+                    'default' => '{{heading_color.color}}'
+                ),
+                'event_status' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Sold out'
+                ),
+                'event_date_location' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Fri 09 Feb 2024 • Location'
+                ),
+                'event_description' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.'
+                ),
+                'event_button' => array(
+                    'type' => array('string', 'null'),
+                    'default' => 'Save my spot'
+                ),
+                'event_button_link' => array(
+                    'type' => array('object', 'null'),
+                    'default' => array('post_id' => 0, 'url' => '', 'post_type' => '', 'title' => '')
+                )
+            ),
+            'example' => array(
+'event_image' => array('id' => 0, 'url' => '', 'size' => '', 'svg' => '', 'alt' => null), 'event_icon' => array('id' => 0, 'url' => '', 'size' => '', 'svg' => '<svg class="h-12 w-12 text-gray-400" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/> </svg>', 'alt' => null), 'event_title' => 'Event title heading', 'heading_color' => '', 'event_status' => 'Sold out', 'event_date_location' => 'Fri 09 Feb 2024 • Location', 'event_description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.', 'event_button' => 'Save my spot', 'event_button_link' => array('post_id' => 0, 'url' => '', 'post_type' => '', 'title' => '')
+            ),
+            'dynamic' => true,
+            'version' => '1.0.15'
+        ) );

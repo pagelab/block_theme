@@ -4,6 +4,15 @@
 
 const path = require('path');
 
+// Informações de versão
+const VERSION_INFO = {
+  VERSION: '0.1.0',
+  VERSION_NAME: 'Initial Beta',
+  RELEASE_DATE: '2025-08-20',
+  CHANGELOG_URL: 'https://github.com/repo/CHANGELOG.md',
+  MINIMUM_NODE_VERSION: '14.0.0'
+};
+
 // Diretórios base do projeto
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const TOOLS_DIR = path.join(PROJECT_ROOT, '_tools');
@@ -176,6 +185,7 @@ const DEV_SETTINGS = {
 };
 
 module.exports = {
+  VERSION_INFO,
   DIRECTORIES,
   FILE_PATTERNS,
   BACKUP_SETTINGS,

@@ -8,7 +8,7 @@
         
         <div class="flex flex-col space-y-3">
           <input type="email" placeholder="<?php echo PG_Blocks_v3::getAttribute( $args, 'email_placeholder' ) ?>" class="border border-gray-300 px-4 py-2 w-full"/>
-          <button class="bg-gray-900 px-4 py-2 text-white hover:bg-primary-700"><?php echo PG_Blocks_v3::getAttribute( $args, 'subscribe_button' ) ?></button>
+          <button class="bg-inverse-subtle px-4 py-2 text-inverse hover:bg-primary-700"><?php echo PG_Blocks_v3::getAttribute( $args, 'subscribe_button' ) ?></button>
         </div>
         
         <p class="text-gray-600 text-sm mt-3"><span><?php echo PG_Blocks_v3::getAttribute( $args, 'privacy_notice' ) ?></span><a href="<?php echo (!empty($_GET['context']) && $_GET['context'] === 'edit') ? 'javascript:void()' : PG_Blocks_v3::getLinkUrl( $args, 'privacy_link' ) ?>" class="text-gray-500 hover:underline"><?php _e( 'Privacy Policy', 'block_theme' ); ?></a><span><?php echo PG_Blocks_v3::getAttribute( $args, 'privacy_notice_text' ) ?></span></p>

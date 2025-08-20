@@ -7,6 +7,7 @@
 
 const BaseProcessor = require('./BaseProcessor');
 const { SEMANTIC_PALETTE } = require('../config/color-mapping');
+const { VERSION_INFO } = require('../config/settings');
 
 class ThemeJsonProcessor extends BaseProcessor {
   constructor(logger = null) {
@@ -131,24 +132,46 @@ class ThemeJsonProcessor extends BaseProcessor {
       this.setNestedProperty(themeData, 'settings.color', colorSettings);
     }
 
-    // Preservar cores não-Tailwind da paleta original
+    // Whitelist restritiva: APENAS tokens semânticos definidos
+    const allowedSemanticSlugs = this.semanticPalette.map(color => color.slug);
+    
     const originalPalette = colorSettings.palette || [];
-    const nonTailwindColors = originalPalette.filter(color => {
-      return color.slug && !color.slug.match(/^(blue|green|red|gray|yellow|purple|pink|indigo|cyan|teal|lime|amber|orange|rose|sky|violet|fuchsia|emerald|slate|zinc|neutral|stone)-\d+$/) &&
-             color.slug !== 'white' &&
-             color.slug !== 'black';
+    
+    // Identificar padrões de cores que devem ser removidas
+    const colorsToRemove = [
+      // Cores Tailwind
+      /^(blue|green|red|gray|yellow|purple|pink|indigo|cyan|teal|lime|amber|orange|rose|sky|violet|fuchsia|emerald|slate|zinc|neutral|stone)-\d+$/,
+      /^(white|black|transparent|current|inherit)$/,
+      // Cores do Pinegrow (primary, secondary, color3, color4, etc.)
+      /^primary-\d+$/,
+      /^secondary-\d+$/,
+      /^color\d+-\d+$/,
+      /^(pearl|accent|neutral)$/
+    ];
+
+    // Manter APENAS cores na whitelist semântica
+    const preservedColors = originalPalette.filter(color => {
+      if (!color.slug) return false;
+      
+      // Se está na whitelist semântica, manter
+      if (allowedSemanticSlugs.includes(color.slug)) {
+        return true;
+      }
+      
+      // Se corresponde a qualquer padrão de remoção, remover
+      const shouldRemove = colorsToRemove.some(pattern => pattern.test(color.slug));
+      
+      // Manter apenas se NÃO deve ser removido E não é um padrão conhecido
+      return !shouldRemove;
     });
 
-    // Combinar cores preservadas com paleta semântica
-    const newPalette = [
-      ...this.semanticPalette,
-      ...nonTailwindColors
-    ];
+    // Usar APENAS a paleta semântica definida (sem cores preservadas)
+    const newPalette = [...this.semanticPalette];
 
     // Atualizar paleta
     colorSettings.palette = newPalette;
     
-    this.log('info', `Paleta atualizada: ${this.semanticPalette.length} tokens semânticos + ${nonTailwindColors.length} cores preservadas`);
+    this.log('info', `Paleta limpa: ${this.semanticPalette.length} tokens semânticos (removidas ${originalPalette.length - newPalette.length} cores não-semânticas)`);
 
     return themeData;
   }
@@ -176,7 +199,7 @@ class ThemeJsonProcessor extends BaseProcessor {
       convertedAt: timestamp,
       originalColorsCount: originalPalette.length,
       semanticTokensCount: this.semanticPalette.length,
-      toolVersion: "1.0.0"
+      toolVersion: VERSION_INFO.VERSION
     };
 
     // Adicionar como propriedade personalizada (será ignorada pelo WordPress)

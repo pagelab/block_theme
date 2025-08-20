@@ -1,0 +1,356 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "color": "rgba(29,78,216,1)",
+          "name": "Marca (fundo base)",
+          "slug": "brand-bg-base"
+        },
+        {
+          "color": "rgba(22,163,74,1)",
+          "name": "Marca (fundo alternativo)",
+          "slug": "brand-bg-alt"
+        },
+        {
+          "color": "rgba(220,38,38,1)",
+          "name": "Marca (fundo acento)",
+          "slug": "brand-bg-accent"
+        },
+        {
+          "color": "rgba(29,78,216,1)",
+          "name": "Marca (texto base)",
+          "slug": "brand-text-base"
+        },
+        {
+          "color": "rgba(22,163,74,1)",
+          "name": "Marca (texto alternativo)",
+          "slug": "brand-text-alt"
+        },
+        {
+          "color": "rgba(220,38,38,1)",
+          "name": "Marca (texto acento)",
+          "slug": "brand-text-accent"
+        },
+        {
+          "color": "rgba(255,255,255,1)",
+          "name": "Fundo base",
+          "slug": "bg-base"
+        },
+        {
+          "color": "rgba(229,231,235,1)",
+          "name": "Fundo suave",
+          "slug": "bg-subtle"
+        },
+        {
+          "color": "rgba(3,7,18,1)",
+          "name": "Fundo inverso",
+          "slug": "bg-inverse"
+        },
+        {
+          "color": "rgba(17,24,39,1)",
+          "name": "Fundo inverso suave",
+          "slug": "bg-inverse-subtle"
+        },
+        {
+          "color": "rgba(17,24,39,1)",
+          "name": "Texto base",
+          "slug": "text-base"
+        },
+        {
+          "color": "rgba(31,41,55,1)",
+          "name": "Texto suave",
+          "slug": "text-subtle"
+        },
+        {
+          "color": "rgba(249,250,251,1)",
+          "name": "Texto inverso",
+          "slug": "text-inverse"
+        },
+        {
+          "color": "rgba(209,213,219,1)",
+          "name": "Texto inverso suave",
+          "slug": "text-inverse-subtle"
+        },
+        {
+          "color": "rgba(156,163,175,1)",
+          "name": "Borda base",
+          "slug": "border-base"
+        },
+        {
+          "color": "rgba(229,231,235,1)",
+          "name": "Borda suave",
+          "slug": "border-subtle"
+        },
+        {
+          "color": "rgba(187,247,208,1)",
+          "name": "Fundo sucesso",
+          "slug": "bg-success"
+        },
+        {
+          "color": "rgba(254,240,138,1)",
+          "name": "Fundo aviso",
+          "slug": "bg-warning"
+        },
+        {
+          "color": "rgba(254,202,202,1)",
+          "name": "Fundo erro",
+          "slug": "bg-error"
+        },
+        {
+          "color": "rgba(191,219,254,1)",
+          "name": "Fundo informação",
+          "slug": "bg-info"
+        },
+        {
+          "color": "rgba(37,99,235,1)",
+          "name": "Botão base",
+          "slug": "button-base"
+        },
+        {
+          "color": "rgba(0,0,0,0)",
+          "name": "Botão inverso",
+          "slug": "button-inverse"
+        },
+        {
+          "color": "rgba(239,68,68,1)",
+          "name": "Botão acento",
+          "slug": "button-accent"
+        },
+        {
+          "color": "rgba(243,244,246,1)",
+          "name": "Quadro",
+          "slug": "card"
+        },
+        {
+          "color": "#ffedef",
+          "name": "primary-50",
+          "slug": "primary-50"
+        },
+        {
+          "color": "#ffd1d5",
+          "name": "primary-100",
+          "slug": "primary-100"
+        },
+        {
+          "color": "#ffb4bb",
+          "name": "primary-200",
+          "slug": "primary-200"
+        },
+        {
+          "color": "#ff95a2",
+          "name": "primary-300",
+          "slug": "primary-300"
+        },
+        {
+          "color": "#ff7387",
+          "name": "primary-400",
+          "slug": "primary-400"
+        },
+        {
+          "color": "rgb(252 73 110)",
+          "name": "primary-500",
+          "slug": "primary-500"
+        },
+        {
+          "color": "#e14162",
+          "name": "primary-600",
+          "slug": "primary-600"
+        },
+        {
+          "color": "#c73a57",
+          "name": "primary-700",
+          "slug": "primary-700"
+        },
+        {
+          "color": "#ae324c",
+          "name": "primary-800",
+          "slug": "primary-800"
+        },
+        {
+          "color": "#952b41",
+          "name": "primary-900",
+          "slug": "primary-900"
+        },
+        {
+          "color": "#f0ebeb",
+          "name": "secondary-50",
+          "slug": "secondary-50"
+        },
+        {
+          "color": "#e0bfbd",
+          "name": "secondary-100",
+          "slug": "secondary-100"
+        },
+        {
+          "color": "#cc9491",
+          "name": "secondary-200",
+          "slug": "secondary-200"
+        },
+        {
+          "color": "#b66a67",
+          "name": "secondary-300",
+          "slug": "secondary-300"
+        },
+        {
+          "color": "#9d3f40",
+          "name": "secondary-400",
+          "slug": "secondary-400"
+        },
+        {
+          "color": "rgb(130 2 28)",
+          "name": "secondary-500",
+          "slug": "secondary-500"
+        },
+        {
+          "color": "#740219",
+          "name": "secondary-600",
+          "slug": "secondary-600"
+        },
+        {
+          "color": "#670217",
+          "name": "secondary-700",
+          "slug": "secondary-700"
+        },
+        {
+          "color": "#5a0114",
+          "name": "secondary-800",
+          "slug": "secondary-800"
+        },
+        {
+          "color": "#4d0111",
+          "name": "secondary-900",
+          "slug": "secondary-900"
+        },
+        {
+          "color": "#fff0f2",
+          "name": "color3-50",
+          "slug": "color3-50"
+        },
+        {
+          "color": "#ffdadf",
+          "name": "color3-100",
+          "slug": "color3-100"
+        },
+        {
+          "color": "#ffc4cc",
+          "name": "color3-200",
+          "slug": "color3-200"
+        },
+        {
+          "color": "#ffaeb9",
+          "name": "color3-300",
+          "slug": "color3-300"
+        },
+        {
+          "color": "#ff95a6",
+          "name": "color3-400",
+          "slug": "color3-400"
+        },
+        {
+          "color": "rgb(252 125 148)",
+          "name": "color3-500",
+          "slug": "color3-500"
+        },
+        {
+          "color": "#e17084",
+          "name": "color3-600",
+          "slug": "color3-600"
+        },
+        {
+          "color": "#c76375",
+          "name": "color3-700",
+          "slug": "color3-700"
+        },
+        {
+          "color": "#ae5666",
+          "name": "color3-800",
+          "slug": "color3-800"
+        },
+        {
+          "color": "#954a58",
+          "name": "color3-900",
+          "slug": "color3-900"
+        },
+        {
+          "color": "#f2ebeb",
+          "name": "color4-50",
+          "slug": "color4-50"
+        },
+        {
+          "color": "#e6c1bf",
+          "name": "color4-100",
+          "slug": "color4-100"
+        },
+        {
+          "color": "#d79793",
+          "name": "color4-200",
+          "slug": "color4-200"
+        },
+        {
+          "color": "#c46e6b",
+          "name": "color4-300",
+          "slug": "color4-300"
+        },
+        {
+          "color": "#ae4344",
+          "name": "color4-400",
+          "slug": "color4-400"
+        },
+        {
+          "color": "rgb(150 2 33)",
+          "name": "color4-500",
+          "slug": "color4-500"
+        },
+        {
+          "color": "#86021e",
+          "name": "color4-600",
+          "slug": "color4-600"
+        },
+        {
+          "color": "#77021a",
+          "name": "color4-700",
+          "slug": "color4-700"
+        },
+        {
+          "color": "#680117",
+          "name": "color4-800",
+          "slug": "color4-800"
+        },
+        {
+          "color": "#590114",
+          "name": "color4-900",
+          "slug": "color4-900"
+        },
+        {
+          "color": "#ffffff",
+          "name": "pearl",
+          "slug": "pearl"
+        }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "fontFamily": "'Sora', sans-serif",
+          "name": "Sora",
+          "slug": "sora"
+        },
+        {
+          "fontFamily": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif",
+          "name": "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif",
+          "slug": "palatino-linotype-book-antiqua-palatino-serif"
+        }
+      ]
+    }
+  },
+  "customTemplates": [],
+  "_conversion": {
+    "convertedAt": "2025-08-20T00:02:41.310Z",
+    "originalColorsCount": 82,
+    "semanticTokensCount": 24,
+    "toolVersion": "1.0.0"
+  }
+}
