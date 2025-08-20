@@ -1,0 +1,205 @@
+# =============================================================================
+# .gitignore - Semantic Colors Tool
+# =============================================================================
+# Este arquivo mantém apenas os arquivos relacionados ao semantic-colors.js
+# Todos os arquivos do tema WordPress (gerados pelo Pinegrow) são excluídos
+
+# =============================================================================
+# ARQUIVOS DO TEMA WORDPRESS (EXCLUIR)
+# =============================================================================
+
+# Arquivos principais do tema
+/style.css
+/functions.php
+/header.php
+/footer.php
+/index.php
+/screenshot.png
+
+# Diretórios do tema
+/blocks/
+/inc/
+/templates/
+/tailwind_theme/
+
+# Arquivo de tema WordPress
+/theme.json
+
+# =============================================================================
+# ARQUIVOS DO SISTEMA OPERACIONAL
+# =============================================================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.nfs*
+
+# =============================================================================
+# NODE.JS E NPM
+# =============================================================================
+
+# Dependências
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos de cache
+.npm
+.eslintcache
+.yarn-integrity
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# =============================================================================
+# EDITORES E IDEs
+# =============================================================================
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains
+.idea/
+*.swp
+*.swo
+*~
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*.tmp
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# =============================================================================
+# ARQUIVOS TEMPORÁRIOS E DE BUILD
+# =============================================================================
+
+# Logs gerais
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+/temp/
+/tmp/
+
+# Arquivos de backup gerais (não do nosso sistema)
+*.bak
+*.backup
+*.old
+
+# =============================================================================
+# ARQUIVOS INCLUÍDOS (SEMANTIC COLORS TOOL)
+# =============================================================================
+
+# IMPORTANTE: Os seguintes arquivos/diretórios SÃO incluídos no repositório:
+
+# /_tools/                    # Todo o diretório de ferramentas
+# /package.json               # Configuração do projeto
+# /package-lock.json          # Lock de dependências
+# /CHANGELOG.md               # Histórico de versões
+# /SEMANTIC-COLORS-README.md  # Documentação principal
+# /CLAUDE.md                  # Instruções e requisitos
+# /.gitignore                 # Este arquivo
+
+# =============================================================================
+# ARQUIVOS ESPECÍFICOS A EXCLUIR (SE EXISTIREM)
+# =============================================================================
+
+# Arquivos de configuração do WordPress/Pinegrow que podem ser criados
+wp-config.php
+.htaccess
+composer.json
+composer.lock
+
+# Uploads e media
+/uploads/
+/media/
+
+# Cache do WordPress
+/cache/
+wp-content/cache/
+
+# Arquivos de desenvolvimento que não são nossos
+gulpfile.js
+webpack.config.js
+rollup.config.js
+vite.config.js
+
+# =============================================================================
+# PADRÕES ESPECÍFICOS
+# =============================================================================
+
+# Arquivos com extensões específicas do tema
+*.php
+*.css
+*.js
+*.html
+
+# EXCEÇÕES: Manter arquivos do _tools/
+!/_tools/**
+!/_tools/**/*.js
+!/_tools/**/*.php
+!/_tools/**/*.css
+!/_tools/**/*.md
+!/_tools/**/*.json
+
+# Manter arquivos de documentação na raiz
+!/CHANGELOG.md
+!/SEMANTIC-COLORS-README.md
+!/CLAUDE.md
+!/package.json
+!/package-lock.json
+!/.gitignore
+!/README.md
+
+# =============================================================================
+# OBSERVAÇÕES
+# =============================================================================
+
+# Este .gitignore é configurado para manter APENAS:
+# 1. Diretório _tools/ completo (scripts, configurações, logs, backups)
+# 2. Arquivos de configuração do projeto (package.json, etc.)
+# 3. Documentação (README, CHANGELOG, etc.)
+# 4. Arquivos de controle de versão (.gitignore)
+#
+# TODOS os outros arquivos do tema WordPress são excluídos porque:
+# - São gerados pelo Pinegrow
+# - Devem ser exportados novamente antes de usar o semantic-colors.js
+# - Não fazem parte do sistema de conversão semântica
