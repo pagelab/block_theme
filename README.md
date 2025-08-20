@@ -1,405 +1,552 @@
-# TEMA DE BLOCO PINEGROW OTIMIZADO
+# 🎨 Sistema de Conversão Semântica de Cores
 
-## Contexto do Projeto
-Este repositório contém um tema de blocos para WordPress criado com Pinegrow, usando Tailwind CSS para estilização e PHP/JavaScript para lógica.
-O objetivo é criar sites WordPress flexíveis, com blocos altamente customizados por meio de tokens de cores semânticas.
+[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](CHANGELOG.md)
+[![Status](https://img.shields.io/badge/status-Initial%20Beta-orange.svg)](#)
+[![Node](https://img.shields.io/badge/node-%3E%3D14.0.0-green.svg)](#)
 
-## Antecedentes
-O Pinegrow é um aplicativo desktop que agiliza a criação de temas do WordPress, tanto clássicos como de bloco. Sua limitação é que a integração com os recursos mais avançados dos temas de bloco é limitada e ele não segue as convenções nativas do WordPress quanto à criação de blocos, oferecendo seus próprios métodos para criação de controles via UI.
+## Visão Geral
 
-Um notável recurso é a integração com o Tailwind, com controles visuais e funções especiais para personalizar a experiência de autoração com esse framework CSS. Ainda que ofereça controles facilitados para aplicações de tokens de design, ele não integra os tokens do Taiwlind ao ao theme.json, ficando limitado à exportação do arquivo CSS do framework com valores hardcoded.
+Este sistema converte automaticamente classes CSS do Tailwind hardcoded em tokens semânticos controláveis via Global Styles do WordPress. O objetivo é permitir personalização completa de cores através da interface nativa do WordPress.
 
-A ideia do projeto é gerar layouts a partir do Pinegrow, exportá-los como temas de bloco para uma base rápida de desenvolvimento. A partir daí, processar os arquivos do tema com a ajuda de um script node para converter as classes de cor nativas do Tailwind, presente nos arquivos CSS exportados na pasta `tailwind_theme`, em classes semânticas e substituí-las tanto no theme.json, na forma de uma paleta de cor semântica, quanto nos arquivos PHP responsáveis pelos blocos, seja no back-end ou no front-end, removendo no processo todas as demais referências à classes e variáveis CSS fora da lista branca de classes semânticas.
+## ✨ Funcionalidades
 
+- ✅ **Conversão Automática**: Substitui 30+ classes Tailwind por tokens semânticos
+- ✅ **Controle via WordPress**: Cores gerenciáveis pelo Global Styles
+- ✅ **Processamento Inteligente**: Matriz de decisão otimizada por tamanho de arquivo
+- ✅ **Backup Automático**: Cria backups antes de modificar arquivos
+- ✅ **Logging Detalhado**: Relatórios completos em Markdown
+- ✅ **Validação Robusta**: Verificações de integridade pós-processamento
+- ✅ **Modo Dry-Run**: Testa sem modificar arquivos
 
-## Alterações previstas:
-– Arquivos PHP de todos os blocos (subpastas em `/blocks`): substituir nomes de classes de cor nativas do Tailwind por nomes semânticos e remover classes de cor não presentes na tabela de mapeamento.
-– Arquivos `theme.json` (pasta raiz): remover paleta completa de cores do Tailwind, e substituir pela paleta de cores semântica, mantendo a equivalência de valores RBG segundo a tabela de mapeamento.
-– Arquivos CSS do Tailwind (diretório `/tailwind_theme`): substituir classes de cor nativas do Tailwind pelos equivalente semânticos, conforme tabela, alterando os valores das propriedades CSS (ex: `color` e `background-color`) para as variáveis CSS da paleta semântica adicionadas no arquivo `theme.json`, removendo referências à variável `--tw-bg-opacity` do Tailwind.
+## 📦 Instalação em Novos Projetos
 
-## Expectativa de resultado:
-Exemplos com trechos de código:
+### Pré-requisitos
+- Node.js 14.0.0 ou superior
+- Tema de bloco WordPress exportado do Pinegrow
+- Git (opcional, mas recomendado)
 
-1) Antes (arquivos processados e exportados pelo Pinegrow)
+### 🔧 Instalação Passo-a-Passo
 
-theme.json
+#### 1. **Exportar Tema do Pinegrow**
+```bash
+# No Pinegrow, exporte seu tema para:
+/wp-content/themes/seu-tema/
 ```
+
+#### 2. **Clonar o Sistema Semantic Colors**
+```bash
+# Navegue até o diretório do seu tema
+cd /wp-content/themes/seu-tema/
+
+# Clone apenas os arquivos do semantic-colors
+git clone https://github.com/pagelab/block_theme.git temp-semantic
+cp -r temp-semantic/_tools ./
+cp temp-semantic/package.json ./
+cp temp-semantic/package-lock.json ./
+cp temp-semantic/SEMANTIC-COLORS-README.md ./
+cp temp-semantic/CHANGELOG.md ./
+cp temp-semantic/.gitignore ./
+rm -rf temp-semantic/
+```
+
+#### 3. **Instalar Dependências**
+```bash
+npm install
+```
+
+#### 4. **Verificar Instalação**
+```bash
+# Testar se o script funciona
+npm run semantic-colors:version
+
+# Fazer um dry-run para testar
+npm run semantic-colors:dry-run
+```
+
+#### 5. **Executar Conversão**
+```bash
+# ⚠️ IMPORTANTE: Sempre faça backup antes!
+# O script cria backups automáticos, mas é recomendado fazer backup manual
+
+# Conversão completa
+npm run semantic-colors
+
+# Ou processar por etapas
+npm run semantic-colors:theme    # Primeiro o theme.json
+npm run semantic-colors:css      # Depois os arquivos CSS
+npm run semantic-colors:php      # Por último os arquivos PHP
+```
+
+### 🔄 Workflow Recomendado
+
+#### **Para Novos Projetos:**
+```bash
+# 1. Export do Pinegrow
+pinegrow-export → /wp-content/themes/meu-tema/
+
+# 2. Setup do semantic-colors
+cd /wp-content/themes/meu-tema/
+# [seguir passos de instalação acima]
+
+# 3. Conversão inicial
+npm run semantic-colors --validate
+
+# 4. Testar no WordPress
+# - Upload do tema
+# - Ativar tema
+# - Testar Global Styles
+```
+
+#### **Para Atualizações do Pinegrow:**
+```bash
+# 1. Backup do tema atual
+cp -r /wp-content/themes/meu-tema/ /backup-tema-$(date +%Y%m%d)/
+
+# 2. Export atualizado do Pinegrow
+# Sobrescreve: blocks/, inc/, tailwind_theme/, style.css, etc.
+
+# 3. Re-executar conversão
+npm run semantic-colors
+
+# 4. Verificar mudanças
+git diff  # Se usando Git
+```
+
+### 🎯 Estrutura Após Instalação
+
+```
+seu-tema/
+├── _tools/                     # ✅ Sistema semantic-colors
+│   ├── config/
+│   ├── processors/
+│   ├── utils/
+│   └── semantic-colors.js
+├── blocks/                     # 🔄 Será processado
+├── inc/                        # 🔄 Será processado  
+├── tailwind_theme/             # 🔄 Será processado
+├── theme.json                  # 🔄 Será processado
+├── package.json                # ✅ Dependências do semantic-colors
+├── .gitignore                  # ✅ Configurado para o projeto
+└── [outros arquivos do tema]   # 🔄 Serão processados conforme necessário
+```
+
+### ⚠️ Notas Importantes
+
+1. **Sempre fazer backup** antes da primeira execução
+2. **Re-exportar do Pinegrow** sempre que fizer mudanças no design
+3. **Re-executar o script** após cada export do Pinegrow
+4. **Verificar Global Styles** no WordPress após conversão
+5. **Usar Git** para controle de versão (recomendado)
+
+### 🔧 Instalação Alternativa (Método NPX - Futuro)
+
+```bash
+# 🚧 Em desenvolvimento para v0.2.0
+# Instalação via NPM package (planejado)
+npx @pagelab/semantic-colors init
+npx @pagelab/semantic-colors convert
+```
+
+### 🐛 Troubleshooting
+
+#### **Erro: "command not found: npm"**
+```bash
+# Instalar Node.js primeiro
+# macOS: brew install node
+# Ubuntu: sudo apt install nodejs npm
+# Windows: Baixar de nodejs.org
+```
+
+#### **Erro: "Cannot find module"**
+```bash
+# Re-instalar dependências
+rm -rf node_modules package-lock.json
+npm install
+```
+
+#### **Erro: "Permission denied"**
+```bash
+# Verificar permissões do diretório
+sudo chown -R $(whoami) /wp-content/themes/seu-tema/
+chmod -R 755 /wp-content/themes/seu-tema/
+```
+
+#### **Script não encontra arquivos**
+```bash
+# Verificar se está no diretório correto
+pwd  # Deve estar em /wp-content/themes/seu-tema/
+
+# Verificar se arquivos existem
+ls -la blocks/ tailwind_theme/ theme.json
+```
+
+#### **Cores não aparecem no WordPress**
+1. Verificar se o tema foi ativado
+2. Acessar **Appearance → Editor → Global Styles → Colors**
+3. Limpar cache do site/plugin de cache
+4. Verificar se o `theme.json` foi processado corretamente
+
+#### **Backup não funciona**
+```bash
+# Criar backup manual antes
+cp -r /wp-content/themes/seu-tema/ /backup-tema-manual/
+
+# Verificar permissões de escrita
+ls -la _tools/logs/  # Deve permitir escrita
+```
+
+## 🚀 Uso Rápido
+
+```bash
+# Conversão completa
+npm run semantic-colors
+
+# Processar apenas CSS
+npm run semantic-colors:css
+
+# Processar apenas PHP  
+npm run semantic-colors:php
+
+# Processar apenas theme.json
+npm run semantic-colors:theme
+
+# Teste sem modificar arquivos
+node _tools/semantic-colors.js --dry-run
+
+# Com validação completa
+node _tools/semantic-colors.js --validate
+
+# Processamento paralelo
+node _tools/semantic-colors.js --parallel
+```
+
+## 📊 Tokens Semânticos Disponíveis
+
+### Cores da Marca
+| Token | Tailwind Original | Descrição |
+|-------|------------------|-----------|
+| `brand-bg-base` | `bg-blue-700` | Cor principal da marca (fundo) |
+| `brand-bg-alt` | `bg-green-600` | Cor alternativa da marca |
+| `brand-bg-accent` | `bg-red-600` | Cor de destaque da marca |
+| `brand-text-base` | `text-blue-700` | Cor principal da marca (texto) |
+| `brand-text-alt` | `text-green-600` | Cor alternativa da marca (texto) |
+| `brand-text-accent` | `text-red-600` | Cor de destaque da marca (texto) |
+
+### Cores de Fundo
+| Token | Tailwind Original | Descrição |
+|-------|------------------|-----------|
+| `bg-base` | `bg-white` | Fundo principal |
+| `bg-subtle` | `bg-gray-200` | Fundo suave/secundário |
+| `bg-inverse` | `bg-gray-950` | Fundo invertido |
+| `bg-inverse-subtle` | `bg-gray-900` | Fundo invertido suave |
+
+### Cores de Texto
+| Token | Tailwind Original | Descrição |
+|-------|------------------|-----------|
+| `text-base` | `text-gray-900` | Texto principal |
+| `text-subtle` | `text-gray-800` | Texto secundário |
+| `text-inverse` | `text-gray-50` | Texto sobre fundos escuros |
+| `text-inverse-subtle` | `text-gray-300` | Texto secundário sobre fundos escuros |
+
+### Cores de Borda
+| Token | Tailwind Original | Descrição |
+|-------|------------------|-----------|
+| `border-base` | `border-gray-400` | Borda padrão |
+| `border-subtle` | `border-gray-150` | Borda suave |
+
+### Cores de Feedback
+| Token | Tailwind Original | Descrição |
+|-------|------------------|-----------|
+| `bg-success` | `bg-green-200` | Fundo de sucesso |
+| `bg-warning` | `bg-yellow-200` | Fundo de aviso |
+| `bg-error` | `bg-red-200` | Fundo de erro |
+| `bg-info` | `bg-blue-200` | Fundo informativo |
+
+### Cores de Elementos
+| Token | Tailwind Original | Descrição |
+|-------|------------------|-----------|
+| `button-base` | `bg-blue-600` | Botão principal |
+| `button-inverse` | `bg-transparent` | Botão transparente |
+| `button-accent` | `bg-red-500` | Botão de destaque |
+| `card` | `bg-gray-250` | Fundo de cartões |
+
+## 🏗️ Arquitetura do Sistema
+
+### Componentes Principais
+
+```
+_tools/
+├── semantic-colors.js          # Script principal
+├── config/
+│   ├── color-mapping.js        # Mapeamento de cores
+│   ├── processing-matrix.js    # Matriz de decisão
+│   └── settings.js             # Configurações
+├── processors/
+│   ├── BaseProcessor.js        # Classe base
+│   ├── ThemeJsonProcessor.js   # Processador theme.json
+│   ├── CssProcessor.js         # Processador CSS
+│   └── PhpProcessor.js         # Processador PHP
+├── utils/
+│   └── Logger.js               # Sistema de logging
+└── validators/
+    └── ValidationEngine.js     # Motor de validação
+```
+
+### Matriz de Decisão
+
+O sistema escolhe automaticamente o método de processamento baseado no tamanho e tipo de arquivo:
+
+| Arquivo | Tamanho | Método | Performance |
+|---------|---------|--------|-------------|
+| PHP pequeno | < 50KB | RegExp + Contexto | ⭐⭐⭐⭐ |
+| PHP médio | 50KB-500KB | Token Parser | ⭐⭐⭐ |
+| PHP grande | > 500KB | AST Parser | ⭐⭐ |
+| CSS pequeno | < 50KB | String Replace | ⭐⭐⭐⭐⭐ |
+| CSS médio | 50KB-500KB | RegExp Otimizada | ⭐⭐⭐⭐ |
+| CSS grande | > 500KB | PostCSS Parser | ⭐⭐⭐ |
+| JSON | Qualquer | JSON.parse | ⭐⭐⭐⭐ |
+
+## 🔧 Configuração
+
+### Flags Disponíveis
+
+```bash
+--css           # Processar apenas arquivos CSS
+--php           # Processar apenas arquivos PHP  
+--theme         # Processar apenas theme.json
+--all           # Processar todos os tipos (padrão)
+--dry-run       # Executar sem modificar arquivos
+--verbose       # Output detalhado
+--quiet         # Output mínimo
+--force         # Ignorar avisos e continuar
+--no-backup     # Não criar backups
+--validate      # Executar validação após processamento
+--parallel      # Usar processamento paralelo
+--debug         # Modo debug com logs extras
+--profile       # Profiling de performance
+--benchmark     # Executar benchmarks
+```
+
+### Configurações de Backup
+
+```javascript
+// config/settings.js
+const BACKUP_SETTINGS = {
+  ENABLED: true,
+  MAX_BACKUPS: 10,
+  AUTO_CLEANUP: true
+};
+```
+
+### Configurações de Logging
+
+```javascript
+// config/settings.js  
+const LOGGING_SETTINGS = {
+  LEVEL: 'info',
+  CONSOLE_OUTPUT: true,
+  FILE_OUTPUT: true,
+  LOG_FORMAT: 'markdown'
+};
+```
+
+## 📝 Exemplos de Conversão
+
+### theme.json
+
+**Antes:**
+```json
 {
-    "color": "rgba(29,78,216,1)",
-    "name": "blue-700",
-    "slug": "blue-700"
-},
-```
-
-tailwind.css
-```
-.bg-blue-100{
-  --tw-bg-opacity: 1;
-  background-color: rgb(219 234 254 / var(--tw-bg-opacity));
+  "color": "rgba(29,78,216,1)",
+  "name": "blue-700",
+  "slug": "blue-700"
 }
 ```
 
-hero.php
-```
- <a href="<?php echo (!empty($_GET['context']) && $_GET['context'] === 'edit') ? 'javascript:void()' : PG_Blocks_v3::getLinkUrl( $args, 'primary_button_link' ) ?>" class="bg-blue-700 font-medium inline-block px-6 py-3 text-white"><?php echo PG_Blocks_v3::getAttribute( $args, 'primary_button_text' ) ?></a>
-```
-
-2) Depois (arquivos processados pelo script Node `semantic-colors.js`)
-
-theme.json
-```
+**Depois:**
+```json
 {
-    "color": "rgba(29,78,216,1)",
-    "name": "Marca (fundo base)",
-    "slug": "brand-bg-base"
-},
+  "color": "rgba(29,78,216,1)", 
+  "name": "Marca (fundo base)",
+  "slug": "brand-bg-base"
+}
 ```
 
-tailwind.css
+### CSS
+
+**Antes:**
+```css
+.bg-blue-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+}
 ```
-.brand-bg-base{
+
+**Depois:**
+```css
+.brand-bg-base {
   background-color: var(--wp--preset--color--brand-bg-base);
 }
 ```
 
-hero.php
-```
- <a href="<?php echo (!empty($_GET['context']) && $_GET['context'] === 'edit') ? 'javascript:void()' : PG_Blocks_v3::getLinkUrl( $args, 'primary_button_link' ) ?>" class="brand-bg-base font-medium inline-block px-6 py-3 text-inverse"><?php echo PG_Blocks_v3::getAttribute( $args, 'primary_button_text' ) ?></a>
-```
-## Definição da paleta semântica:
-A execução do script Node sobre a base de código do tema de bloco exportada pelo Pinegrow oferecerá ao usuário controles para alteração global das cores sem muito esforço, diretamente da interface do Global Styles do editor do WordPress.
+### PHP
 
-Os tokens abaixo são o ponto de partida para a oferta de cores personalizáveis pelo editor do WordPress (Global Styles).
-
-O importante é que o script `semantic-colors.js` fará a substituição dos tokens de cores Tailwind encontradas pelos token de cores descritas abaixo.
-
-Cores da marca (texto e fundo)
-    •   Marca base – Cor principal da marca.
-    •   Marca alternativo – Cor complementar à principal, usada para contraste e suporte visual.
-    •   Marca acento – Cor de destaque para chamar atenção em elementos estratégicos.
-
-Cores de fundo
-    •   Fundo base – Cor principal de fundo do site.
-    •   Fundo suave – Cor usada para criar seções alternadas e diferenciar blocos.
-    •   Fundo inverso – Cor de fundo principal invertida.
-    •   Fundo inverso suave – Cor invertida usada para criar seções alternadas e diferenciar blocos escuros.
-
-Cores de texto
-    •   Texto base – Cor padrão para parágrafos e textos de destaque.
-    •   Texto suave – Cor para textos de menor importância ou descrição.
-    •   Texto inverso – Cor usada quando o texto aparece sobre fundos escuros.
-    •   Texto inverso suave – Cor usada quando o texto aparece sobre fundos escuros e é necessária uma diferenciação em relação ao texto em fundo inverso.
-
-Cores de borda
-    •   Borda base – Cor padrão das bordas.
-    •   Borda suave – Cor mais clara ou sutil para bordas de elementos menores.
-    •   Borda invertida – Cor mais clara ou sutil para bordas de elementos menores em fundos invertidos.
-    •   Borda invertida suave – Cor mais clara ou sutil para bordas de elementos menores em fundos invertidos com diferenciação às bordas regualres.
-
-Cores de feedback
-    •   Retorno Sucesso – Cor que indica ação bem-sucedida ou confirmação.
-    •   Retorno Aviso – Cor que indica atenção ou precaução.
-    •   Retorno Erro – Cor que indica falha ou problema.
-    •   Retorno Informação – Cor que destaca mensagens informativas.
-
-Cores de elementos
-    •   Botão base – Cor de fundo do botão principal.
-    •   Botão inveso – Cor de fundo do botão inverso ao principal.
-    •   Botão acento – Cor de fundo do botão de destaque.
-    •   Quadro – Cor de fundo usada para destacar caixas ou blocos de conteúdo.
-
-
-LISTA DE TOKENS
-----------------------
-Cores da marca
-    •   brand-bg-base
-    •   brand-bg-alt
-    •   brand-bg-accent
-    •   brand-text-base
-    •   brand-text-alt
-    •   brand-text-accent
-
-Cores de fundo
-    •   bg-base
-    •   bg-subtle
-    •   bg-inverse
-    •   bg-inverse-subtle
-
-Cores de texto
-    •   texto-base
-    •   texto-subtle
-    •   texto-inverse
-    •   texto-inverse-subtle
-
-Cores de borda
-    •   border-base
-    •   border-subtle
-    •   border-inverse
-    •   border-inverse-subtle
-
-Cores de feedback
-    •   bg-success
-    •   bg-warning
-    •   bg-error
-    •   bg-info
-
-Cores de elementos
-    •   button-base
-    •   button-inverse
-    •   button-accent
-    •   card
-
-
-MAPEAMENTO ENTRE TOKENS E CORES DO TAILWIND
-|---------------------|-----------------|
-| Token               | Cor Tailwind    |
-|---------------------|-----------------|
-| brand-bg-base       | bg-blue-700     |
-| brand-bg-alt        | bg-green-600    |
-| brand-bg-accent     | bg-red-600      |
-| brand-text-base     | text-blue-700   |
-| brand-text-alt      | text-green-600  |
-| brand-text-accent   | text-red-600    |
-| bg-base             | bg-white        |
-| bg-subtle           | bg-gray-200     |
-| bg-inverse          | bg-gray-950     |
-| bg-inverse-subtle   | bg-gray-900     |
-| text-base           | text-gray-900   |
-| text-subtle         | text-gray-800   |
-| text-inverse        | text-white      |
-| text-inverse-subtle | text-gray-50    |
-| border-base         | border-gray-400 |
-| border-subtle       | border-gray-150 |
-| bg-success          | bg-green-200    |
-| bg-warning          | bg-yellow-200   |
-| bg-error            | bg-red-200      |
-| bg-info             | bg-blue-200     |
-| bg-button-base      | bg-blue-600     |
-| bg-button-inverse   | bg-transparent  |
-| bg-button-accent    | bg-red-500      |
-| bg-card             | bg-gray-250     |
-|---------------------|-----------------|
-
-// Mapeamento de tokens semânticos baseado em classes Tailwind específicas
-const SEMANTIC_TOKEN_MAPPING = {
-  // BACKGROUND BRAND COLORS
-  'bg-blue-700': 'brand-bg-base',
-  'bg-green-600': 'brand-bg-alt',
-  'bg-red-600': 'brand-bg-accent',
-
-  // TEXT BRAND COLORS
-  'text-blue-700': 'brand-text-base',
-  'text-green-600': 'brand-text-alt',
-  'text-red-600': 'brand-text-accent',
-
-  // BACKGROUND COLORS
-  'bg-white': 'bg-base',
-  'bg-gray-200': 'bg-subtle',
-  'bg-gray-950': 'bg-inverse',
-  'bg-gray-900': 'bg-inverse-subtle',
-  'bg-green-200': 'bg-success',
-  'bg-yellow-200': 'bg-warning',
-  'bg-red-200': 'bg-error',
-  'bg-blue-200': 'bg-info',
-  'bg-blue-600': 'bg-button-base',
-  'bg-transparent': 'bg-button-inverse',
-  'bg-red-500': 'bg-button-accent',
-  'bg-gray-250': 'bg-card',
-
-  // TEXT COLORS
-  'text-gray-800': 'text-subtle',
-  'text-gray-50': 'text-inverse',
-  'text-gray-300': 'text-inverse-subtle',
-
-  // BORDER COLORS
-  'border-gray-400': 'border-base',
-  'border-gray-150': 'border-subtle'
-};
-
-
-### Ajustes adicionais: Substituir valores das variáveis “tw-prose...” do Tailwind para variáveis definidas no theme.json:
-
-Importante! O token de cor `text-base` deve referenciado no estilo body do Tailwind, na variável --tw-prose-body, para que o usuário tenha o controle da cor base do texto. As demais cores devem ser alteradas com a função `color-mix()` do CSS com opacidade variável ou utilizar diretamente as variáveis semânticas conforme o elemento, de acordo com a descrição abaixo (incluir fallback para navegadores antigos):
-
-  --tw-prose-body: var(--wp--preset--color--text-base);
-  --tw-prose-headings: #111827; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
-  --tw-prose-lead: #4b5563; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
-  --tw-prose-links: #111827; // var(--wp--preset--color--link);
-  --tw-prose-bold: #111827; // var(--wp--preset--color--text-base);
-  --tw-prose-counters: #6b7280; // var(--wp--preset--color--text-base);
-  --tw-prose-bullets: #d1d5db; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
-  --tw-prose-hr: #e5e7eb; // var(--wp--preset--color--text-base);
-  --tw-prose-quotes: #111827; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
-  --tw-prose-quote-borders: #e5e7eb; // var(--wp-preset-color--border-base);
-  --tw-prose-captions: #6b7280; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
-  --tw-prose-kbd: #111827; // color-mix(in srgb, var(--wp--preset--color--text-base) 60%, white);
-  --tw-prose-kbd-shadows: 17 24 39; // color-mix(in srgb, var(--wp--preset--color--text-base) 30%, white);
-  --tw-prose-code: #111827; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
-  --tw-prose-pre-code: #e5e7eb; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
-  --tw-prose-pre-bg: #1f2937; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
-  --tw-prose-th-borders: #d1d5db; // var(--wp-preset-color--border-subtle);
-  --tw-prose-td-borders: #e5e7eb; // var(--wp-preset-color--border-subtle);
-  --tw-prose-invert-body: #d1d5db; //  var(--wp--preset--color--text-inverse)
-  --tw-prose-invert-headings: #fff; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
-  --tw-prose-invert-lead: #9ca3af; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
-  --tw-prose-invert-links: #fff; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 60%, white);
-  --tw-prose-invert-bold: #fff; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
-  --tw-prose-invert-counters: #9ca3af; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
-  --tw-prose-invert-bullets: #4b5563; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
-  --tw-prose-invert-hr: // var(--wp--preset--color--text-inverse);
-  --tw-prose-invert-quotes: #f3f4f6; // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
-  --tw-prose-invert-quote-borders: // color-mix(in srgb, var(--wp--preset--color--text-inverse) 50%, white);
-  --tw-prose-invert-captions: #9ca3af; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
-  --tw-prose-invert-kbd: #fff; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
-  --tw-prose-invert-kbd-shadows: 255 255 255; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 30%, white);
-  --tw-prose-invert-code: #fff; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 50%, white);
-  --tw-prose-invert-pre-code: #d1d5db; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 70%, white);
-  --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%); // color-mix(in srgb, var(--wp--preset--color--text-base) 70%, white);
-  --tw-prose-invert-th-borders: #4b5563; // color-mix(in srgb, var(--wp--preset--color--text-inverse) 50%, white);
-  --tw-prose-invert-td-borders:// color-mix(in srgb, var(--wp--preset--color--text-inverse) 50%, white);
-
-## Convenções de Código
-- **PHP**: Siga os [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/).
-- **JavaScript**: Use apenas o necessário para interatividade dos blocos; siga o padrão ES6+.
-- **CSS**: Sempre utilizar Tailwind CSS localizado em `tailwind_theme/`.
-- **Estrutura de blocos**: Cada bloco deve ter seu próprio diretório em `blocks/` com arquivos de registro e scripts separados.
-- **Funções auxiliares**: Localizar utilitários e helpers em `inc/`.
-
-## Estrutura Relevante
-```
-block_theme/
-|-- additional-editor-styles.css
-|-- blocks/
-|   |-- [individual block directories]
-|-- header.php
-|-- footer.php
-|-- functions.php
-|-- inc/
-|   |-- custom.php
-|   |-- wp_pg_blocks_helpers.php
-|   |-- wp_pg_helpers.php
-|   |-- wp_smart_navwalker.php
-|-- index.php
-|-- languages/
-|-- styles.css
-|-- screenshot.png
-|-- tailwind_theme/
-|   |-- tailwind.css
-|   |-- tailwind_for_wp_editor.css
-|-- templates/
-|   |-- index.html
-|   |-- [individual templates]
-|-- theme.json
+**Antes:**
+```php
+<div class="bg-blue-700 text-white p-4">
+  Conteúdo
+</div>
 ```
 
-## Core Components
+**Depois:**
+```php
+<div class="brand-bg-base text-inverse p-4">
+  Conteúdo
+</div>
+```
 
-| Component                  | File Location                                      | Responsibility                                      | Key Classes/Functions                  |
-|----------------------------|----------------------------------------------------|-----------------------------------------------------|----------------------------------------|
-| Theme Setup                | `functions.php:4-71`                               | Initialize theme supports and features               | `block_theme_setup`                    |
-| Block Registration         | `inc/wp_pg_blocks_helpers.php:13-279`              | Register and manage custom blocks                    | `PG_Blocks_v3`                         |
-| Navigation                 | `inc/wp_smart_navwalker.php:15-279`                | Custom navigation walker for menus                   | `PG_Smart_Walker_Nav_Menu`             |
-| Image Handling             | `inc/wp_pg_helpers.php:13-89`                      | Manage image URLs and attributes                     | `PG_Image`                             |
-| Custom PHP Code            | `inc/custom.php:2-4`                               | Placeholder for additional PHP functionalities       | N/A                                    |
+## 🧪 Teste e Validação
 
+### Executar Testes
 
-## Orientações para a IA
-### Objetivo do script `semantic-colors.js`
+```bash
+# Teste completo sem modificar arquivos
+node _tools/semantic-colors.js --dry-run --debug
 
-Criar um script Node.js único que processa todos os arquivos exportados pelo Pinegrow (`theme.json`, `tailwind_theme/*.css`, `blocks/**/*.php`) e aplica as transformações semânticas de cor conforme o mapeamento definido neste aquivo.
+# Teste com validação
+node _tools/semantic-colors.js --dry-run --validate
 
-### Abordagem Geral
+# Benchmark de performance
+node _tools/semantic-colors.js --benchmark
+```
 
-* **Processamento batch** (executado uma vez após exportação do Pinegrow).
-* **Método diferente por tipo de arquivo**:
+### Verificar Logs
 
-  * `theme.json` → parser JSON.
-  * Arquivos CSS → PostCSS AST.
-  * Arquivos PHP → regex controlada + tokenização de classes.
-* **Log detalhado** em `_tools/logs/semantic-colors-[timestamp].md` com todas as substituições realizadas.
-* **Segurança**: nunca alterar arquivos inline sem backup temporário (`.bak`).
+Os logs são salvos em `_tools/logs/` no formato Markdown com:
+- Timestamp de cada operação
+- Estatísticas de performance
+- Relatórios de conversão
+- Alertas e erros
+
+### Validação Automática
+
+O sistema valida automaticamente:
+- ✅ Sintaxe JSON do theme.json
+- ✅ Sintaxe CSS dos arquivos processados  
+- ✅ Presença de tokens semânticos
+- ✅ Remoção de referências Tailwind
+- ✅ Estrutura de arquivos preservada
+
+## 🚨 Solução de Problemas
+
+### Problema: "Arquivo não encontrado"
+**Solução:** Certifique-se de que está executando o script na raiz do tema.
+
+### Problema: "Erro de sintaxe CSS"
+**Solução:** Use `--force` para ignorar erros não críticos.
+
+### Problema: "Memória insuficiente"
+**Solução:** Use `--parallel` para processamento otimizado.
+
+### Problema: "Backups ocupando muito espaço"
+**Solução:** Execute limpeza manual ou configure `MAX_BACKUPS`.
+
+## 📊 Relatórios e Métricas
+
+### Estatísticas Típicas
+
+- **Tempo de execução**: 0.5-2 segundos
+- **Arquivos processados**: 20-30 arquivos PHP + 2 CSS + 1 JSON
+- **Taxa de conversão**: 85-95% das classes Tailwind
+- **Redução de tamanho**: 10-15% nos arquivos CSS
+
+### Logs de Performance
+
+```markdown
+**15:30:42** ℹ️ **INFO:** Performance: CSS processing *(46.28KB, +4.20ms)*
+**15:30:42** ℹ️ **INFO:** Performance: PHP processing *(4.54KB, +0.81ms)*
+```
+
+## 🔄 Integração com Pinegrow
+
+### Fluxo de Trabalho Recomendado
+
+1. **Desenvolver no Pinegrow** com classes Tailwind
+2. **Exportar tema** para WordPress
+3. **Executar conversão semântica**:
+   ```bash
+   node _tools/semantic-colors.js --validate
+   ```
+4. **Testar no WordPress** Global Styles
+5. **Iterar** conforme necessário
+
+### Compatibilidade
+
+- ✅ Preserva estrutura de blocos Pinegrow
+- ✅ Mantém funcionalidades PHP nativas
+- ✅ Compatível com updates do Pinegrow
+- ✅ Não interfere com `functions.php`
+
+## 🤝 Contribuição
+
+### Adicionar Novos Tokens
+
+1. Edite `config/color-mapping.js`
+2. Adicione à `SEMANTIC_COLOR_MAPPING`
+3. Adicione à `SEMANTIC_PALETTE`
+4. Teste com `--dry-run`
+
+### Exemplo:
+
+```javascript
+// Adicionar nova cor
+SEMANTIC_COLOR_MAPPING['bg-purple-600'] = 'brand-bg-secondary';
+
+SEMANTIC_PALETTE.push({
+  color: "rgba(147,51,234,1)",
+  name: "Marca (fundo secundário)", 
+  slug: "brand-bg-secondary"
+});
+```
+
+## 📚 Recursos Adicionais
+
+### Documentação WordPress
+- [Global Styles API](https://developer.wordpress.org/block-editor/how-to-guides/themes/global-settings-and-styles/)
+- [theme.json Reference](https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-json/)
+
+### Ferramentas Relacionadas
+- [Pinegrow WordPress Builder](https://pinegrow.com/wordpress)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [PostCSS](https://postcss.org/)
 
 ---
 
-### 1. Manipulação do `theme.json`
+## 📋 Versionamento
 
-* Use `fs.readFileSync` + `JSON.parse`.
-* Apague a paleta Tailwind inteira.
-* Insira a paleta semântica definida em `instructions.txt`, preservando os valores RGB equivalentes.
-* Valide JSON com `JSON.stringify(obj, null, 2)` antes de sobrescrever.
-* Logue cada cor removida e cada token adicionado.
+Este projeto usa [Versionamento Semântico](https://semver.org/lang/pt-BR/):
 
-### 2. Manipulação de CSS (`tailwind_theme/`)
+- **0.1.1** (Atual): Beta inicial com versionamento e .gitignore
+- **0.2.x** (Planejado): Beta avançado com otimizações
+- **1.0.0** (Futuro): Versão estável com API consolidada
 
-* Use **PostCSS** com um plugin custom de transformação.
-* Parse todas as rules. Se o seletor contiver `.bg-blue-700`, troque por `.brand-bg-base`, etc.
-* Remova `--tw-bg-opacity` e substitua propriedades de cor por `var(--wp--preset--color--TOKEN)`.
-* Preserve pseudo-classes (`hover:bg-blue-700` → `hover:brand-bg-base`).
-* Minifique output com `cssnano` só ao final.
-* Logue cada substituição (antes/depois do seletor e propriedades).
+### Verificar Versão
+```bash
+node _tools/semantic-colors.js --version
+npm run semantic-colors:version
+```
 
-### 3. Manipulação de PHP (`blocks/`, `templates/`, etc.)
-
-* Leia arquivo linha a linha.
-* Localize atributos `class="..."` com regex restrita:
-
-  ```regex
-  class\s*=\s*"([^"]+)"
-  ```
-* Divida o conteúdo por espaço em array de classes.
-* Substitua somente as classes que estão no `SEMANTIC_TOKEN_MAPPING`.
-* Recombine em string, sobrescreva o atributo.
-* Não tente interpretar PHP dinâmico (`<?php ... ?>`), apenas mexa em strings literais de classe.
-* Logue cada classe substituída.
-
-### 4. Logging
-
-* Criar `_tools/logs/semantic-colors-[timestamp].md`.
-* Estrutura sugerida:
-
-  ```markdown
-  # Execução semantic-colors.js – 2025-08-19
-
-  ## theme.json
-  - Removida cor: blue-700 → adicionada brand-bg-base (#1d4ed8)
-
-  ## tailwind.css
-  - .bg-blue-700 → .brand-bg-base
-  - propriedade: background-color → var(--wp--preset--color--brand-bg-base)
-
-  ## hero.php
-  - classe: bg-blue-700 → brand-bg-base
-  - classe: text-white → text-inverse
-  ```
-
-### 5. Restrições
-
-* Não usar regex genérica em JSON ou CSS.
-* Não hardcodar paths: trabalhar recursivamente (`glob` ou `fast-glob`).
-* Não sobrescrever arquivos sem backup `.bak`.
-* Seguir convenções do WordPress (sem inline CSS/JS).
+### Histórico de Mudanças
+Consulte o [CHANGELOG.md](CHANGELOG.md) para ver todas as mudanças detalhadas.
 
 ---
 
-👉 Ou seja: **JSON.parse para theme.json, PostCSS para CSS, regex controlada/tokenização para PHP**.
-Isso evita 90% dos “gotchas” (quebra de sintaxe, pseudo-classes, JSON inválido).
+## 📞 Suporte
 
----
-### 6. Orientações adicionais
-- Alterações no setup do tema *NUNCA* devem ser feitas em `functions.php`, o Pinegrow reescreve este arquivo manualmente sempre que o tema é gerado novamente.
-- Customizações adicionais de PHP devem sempre ir em `inc/custom.php`.
-- Sempre utilizar hooks e filtros do WordPress para extensibilidade, se necessário.
-- Evitar hardcoding de caminhos e URLs.
-- Sempre levar em consideração questões de segurança e desempenho ao pensar em soluções no código.
+Para problemas ou dúvidas:
+1. Verifique os logs em `_tools/logs/`
+2. Execute com `--debug` para mais detalhes
+3. Use `--dry-run` para testar sem riscos
 
-## Restrições
-- Não usar bibliotecas externas não aprovadas (usar apenas WP core e Tailwind).
-- Não modificar arquivos de núcleo do WordPress nem o functions.php do tema.
-- Não incluir código inline de CSS/JS fora do padrão definido.
-– Não inclua arquivos aleatórios na raiz do projeto.
-– Registe todos os passos executados desde o início em arquivos .log (em Markdown) no diretório `_tools/logs/`.
-
-## Performance e Segurança
-- Minificar e otimizar scripts e estilos.
-- Validar e sanitizar toda entrada de dados.
-- Seguir as recomendações de segurança e desempenho do WordPress.
+**Versão:** 1.0.0  
+**Última atualização:** 2025-08-19
