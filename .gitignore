@@ -180,6 +180,10 @@ vite.config.js
 !/_tools/**/*.md
 !/_tools/**/*.json
 
+# EXCLUIR: Backups são específicos de cada instalação local
+/_tools/backups/
+/_tools/logs/
+
 # Manter arquivos de documentação na raiz
 !/CHANGELOG.md
 !/SEMANTIC-COLORS-README.md
