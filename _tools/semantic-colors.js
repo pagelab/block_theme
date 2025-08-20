@@ -57,6 +57,27 @@ class SemanticColorsPipeline {
     try {
       await this.initialize();
       
+      // Verificar comandos CSV primeiro
+      if (this.options.exportCsv) {
+        await this.exportCsv();
+        return;
+      }
+      
+      if (this.options.validateCsv) {
+        await this.validateCsv();
+        return;
+      }
+      
+      if (this.options.initCsv) {
+        await this.initCsv();
+        return;
+      }
+      
+      if (this.options.listTokens) {
+        await this.listTokens();
+        return;
+      }
+      
       this.logger.info(MESSAGES.INFO.STARTING);
       
       // Executar etapas baseado nas opções
@@ -371,6 +392,86 @@ class SemanticColorsPipeline {
   }
 
   /**
+   * Exportar configuração atual para CSV
+   */
+  async exportCsv() {
+    console.log('📄 Exportando configuração atual para CSV...');
+    const TokenManager = require('./utils/TokenManager');
+    const tokenManager = new TokenManager();
+    tokenManager.exportToCsv();
+    console.log('✅ Exportação concluída!');
+  }
+
+  /**
+   * Validar arquivo CSV
+   */
+  async validateCsv() {
+    console.log('🔍 Validando arquivo CSV...');
+    const path = require('path');
+    const CsvParser = require('./utils/CsvParser');
+    const csvPath = path.join(process.cwd(), 'semantic-tokens.csv');
+    
+    try {
+      const rows = CsvParser.parse(csvPath);
+      const errors = CsvParser.validate(rows);
+      
+      if (errors.length === 0) {
+        console.log('✅ CSV válido!');
+        console.log(`📊 Total de tokens: ${rows.length}`);
+      } else {
+        console.log('❌ Erros encontrados:');
+        errors.forEach(error => console.log(`  - ${error}`));
+      }
+    } catch (error) {
+      console.log(`❌ Erro: ${error.message}`);
+    }
+  }
+
+  /**
+   * Criar template CSV
+   */
+  async initCsv() {
+    console.log('📄 Criando template CSV...');
+    const path = require('path');
+    const fs = require('fs-extra');
+    const CsvParser = require('./utils/CsvParser');
+    const csvPath = path.join(process.cwd(), 'semantic-tokens.csv');
+    const template = CsvParser.generateTemplate();
+    
+    fs.writeFileSync(csvPath, template);
+    console.log(`✅ Template criado: ${csvPath}`);
+    console.log('💡 Edite o arquivo e execute: npm run semantic-colors -- --validate-csv');
+  }
+
+  /**
+   * Listar tokens disponíveis
+   */
+  async listTokens() {
+    console.log('📋 Listando tokens disponíveis...');
+    const TokenManager = require('./utils/TokenManager');
+    const tokenManager = new TokenManager();
+    const tokens = tokenManager.tokens;
+    
+    console.log(`\n📊 Total de tokens: ${tokens.length}`);
+    console.log('\n📋 Tokens por categoria:');
+    
+    const byCategory = {};
+    tokens.forEach(token => {
+      if (!byCategory[token.category]) {
+        byCategory[token.category] = [];
+      }
+      byCategory[token.category].push(token);
+    });
+    
+    Object.entries(byCategory).forEach(([category, categoryTokens]) => {
+      console.log(`\n🎨 ${category.toUpperCase()} (${categoryTokens.length}):`);
+      categoryTokens.forEach(token => {
+        console.log(`  - ${token.slug}: ${token.name} (${token.colorHex})`);
+      });
+    });
+  }
+
+  /**
    * Finalizar pipeline
    */
   async finalize() {
@@ -462,7 +563,14 @@ class SemanticColorsPipeline {
       // Flags de desenvolvimento
       debug: args.includes('--debug'),
       profile: args.includes('--profile'),
-      benchmark: args.includes('--benchmark')
+      benchmark: args.includes('--benchmark'),
+      
+      // Novos comandos CSV
+      exportCsv: args.includes('--export-csv'),
+      validateCsv: args.includes('--validate-csv'),
+      initCsv: args.includes('--init-csv'),
+      listTokens: args.includes('--list-tokens'),
+      useCsv: args.includes('--use-csv')
     };
 
     // Mostrar help se solicitado
@@ -489,6 +597,18 @@ class SemanticColorsPipeline {
     console.log('  --version, -v   Exibir versão do script');
     console.log('  --help, -h      Exibir esta ajuda');
     
+    // Comandos CSV
+    console.log('');
+    console.log('📄 Comandos CSV:');
+    console.log('  --export-csv    Exportar configuração atual para CSV');
+    console.log('  --validate-csv  Validar formato do arquivo CSV');
+    console.log('  --init-csv      Criar template CSV');
+    console.log('  --list-tokens   Listar tokens disponíveis');
+    console.log('  --use-csv       Forçar uso do CSV (se disponível)');
+    
+    // Comandos existentes
+    console.log('');
+    console.log('🔧 Comandos de conversão:');
     for (const [flag, description] of Object.entries(CLI_FLAGS)) {
       console.log(`  ${flag.padEnd(15)} ${description}`);
     }
@@ -499,6 +619,9 @@ class SemanticColorsPipeline {
     console.log('  node _tools/semantic-colors.js --css --dry-run');
     console.log('  node _tools/semantic-colors.js --php --no-backup');
     console.log('  node _tools/semantic-colors.js --all --validate --parallel');
+    console.log('  node _tools/semantic-colors.js --export-csv');
+    console.log('  node _tools/semantic-colors.js --init-csv');
+    console.log('  node _tools/semantic-colors.js --validate-csv');
   }
 }
 

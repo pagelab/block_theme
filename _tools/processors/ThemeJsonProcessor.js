@@ -6,13 +6,14 @@
  */
 
 const BaseProcessor = require('./BaseProcessor');
-const { SEMANTIC_PALETTE } = require('../config/color-mapping');
+const TokenManager = require('../utils/TokenManager');
 const { VERSION_INFO } = require('../config/settings');
 
 class ThemeJsonProcessor extends BaseProcessor {
   constructor(logger = null) {
     super(logger);
-    this.semanticPalette = SEMANTIC_PALETTE;
+    this.tokenManager = new TokenManager();
+    this.semanticPalette = this.tokenManager.getSemanticPalette();
   }
 
   /**
