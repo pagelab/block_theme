@@ -35,6 +35,10 @@
 ._*
 .Spotlight-V100
 .Trashes
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 ehthumbs.db
 Thumbs.db
 
