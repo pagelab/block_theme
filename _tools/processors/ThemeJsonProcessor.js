@@ -7,7 +7,7 @@
 
 const BaseProcessor = require('./BaseProcessor');
 const TokenManager = require('../utils/TokenManager');
-const { VERSION_INFO } = require('../config/settings');
+const { VERSION_INFO, COLOR_CONTROLS } = require('../config/settings');
 
 class ThemeJsonProcessor extends BaseProcessor {
   constructor(logger = null) {
@@ -73,6 +73,9 @@ class ThemeJsonProcessor extends BaseProcessor {
 
       // Substituir paleta por tokens semânticos
       themeData = this.replaceColorPalette(themeData);
+
+      // Adicionar controles de cor granulares
+      themeData = this.addColorControlSettings(themeData);
 
       // Adicionar metadados sobre a conversão
       themeData = this.addConversionMetadata(themeData, originalPalette);
@@ -366,6 +369,45 @@ class ThemeJsonProcessor extends BaseProcessor {
     }, obj);
     
     target[lastKey] = value;
+  }
+
+  /**
+   * Adicionar configurações de controles de cor granulares
+   * 
+   * Define quais controles de cor estarão disponíveis no Global Styles do WordPress.
+   * Apenas heading e link terão controles individuais, enquanto text, background, 
+   * caption e button serão controlados através da paleta semântica.
+   * 
+   * @param {object} themeData - Dados do theme.json
+   * @returns {object} Dados do theme.json com controles de cor configurados
+   */
+  addColorControlSettings(themeData) {
+    this.log('debug', 'Adicionando configurações de controles de cor granulares');
+
+    // Garantir que a estrutura settings.color existe
+    if (!themeData.settings) {
+      themeData.settings = {};
+    }
+    
+    if (!themeData.settings.color) {
+      themeData.settings.color = {};
+    }
+
+    // Combinar controles habilitados e desabilitados
+    const colorControls = {
+      ...COLOR_CONTROLS.ENABLED,
+      ...COLOR_CONTROLS.DISABLED
+    };
+
+    // Aplicar configurações de controles de cor
+    Object.assign(themeData.settings.color, colorControls);
+
+    this.log('debug', 'Controles de cor configurados:', {
+      enabled: Object.keys(COLOR_CONTROLS.ENABLED),
+      disabled: Object.keys(COLOR_CONTROLS.DISABLED)
+    });
+
+    return themeData;
   }
 
   /**

@@ -175,6 +175,30 @@ const MESSAGES = {
   }
 };
 
+// Configurações de controles de cor granulares
+const COLOR_CONTROLS = {
+  // Controles habilitados - personalização avançada específica
+  ENABLED: {
+    heading: true,  // Controles de cor por nível de cabeçalho (H1, H2, etc.)
+    link: true      // Controles de cor para links (hover, visited, etc.)
+  },
+  
+  // Controles desabilitados - controlados pela paleta semântica
+  DISABLED: {
+    text: false,       // Cor de texto controlada pela paleta
+    background: false, // Cor de fundo controlada pela paleta
+    caption: false,    // Cor de legendas controlada pela paleta
+    button: false      // Cor de botões controlada pela paleta
+  },
+  
+  // Configurações adicionais
+  SETTINGS: {
+    MERGE_WITH_EXISTING: true, // Fazer merge com configurações existentes
+    PRESERVE_CUSTOM: true,     // Preservar configurações customizadas
+    VALIDATE_STRUCTURE: true   // Validar estrutura do theme.json
+  }
+};
+
 // Configurações de desenvolvimento
 const DEV_SETTINGS = {
   ENABLE_DEBUGGING: process.env.NODE_ENV === 'development',
@@ -195,5 +219,6 @@ module.exports = {
   FILE_TYPE_SETTINGS,
   CLI_FLAGS,
   MESSAGES,
+  COLOR_CONTROLS,
   DEV_SETTINGS
 };
