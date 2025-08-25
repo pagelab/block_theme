@@ -12,6 +12,7 @@ Este sistema converte automaticamente classes CSS do Tailwind hardcoded em token
 
 - ✅ **Conversão Automática**: Substitui 30+ classes Tailwind por tokens semânticos
 - ✅ **Controle via WordPress**: Cores gerenciáveis pelo Global Styles
+- ✅ **Controles de Cor Granulares**: Configuração seletiva de controles no WordPress (heading, link habilitados; text, background, caption, button desabilitados)
 - ✅ **Processamento Inteligente**: Matriz de decisão otimizada por tamanho de arquivo
 - ✅ **Backup Automático**: Cria backups antes de modificar arquivos
 - ✅ **Logging Detalhado**: Relatórios completos em Markdown
@@ -201,6 +202,44 @@ npm run semantic-colors:version
 
 # Ajuda
 npm run semantic-colors:help
+```
+
+## 🎨 Controles de Cor Granulares
+
+O sistema implementa uma estratégia de controles de cor que oferece o equilíbrio perfeito entre simplicidade e flexibilidade:
+
+### ✅ **Controles Habilitados** (Personalização Avançada)
+- **Heading** (`heading: true`): Controles individuais por nível de cabeçalho (H1, H2, H3, etc.)
+- **Link** (`link: true`): Controles específicos para estados de link (normal, hover, visited, etc.)
+
+### ❌ **Controles Desabilitados** (Controlados pela Paleta Semântica)
+- **Text** (`text: false`): Cor de texto controlada pela paleta (`text-base`, `text-subtle`, etc.)
+- **Background** (`background: false`): Cor de fundo controlada pela paleta (`bg-base`, `bg-subtle`, etc.)
+- **Caption** (`caption: false`): Cor de legendas controlada pela paleta
+- **Button** (`button: false`): Cor de botões controlada pela paleta (`button-base`, `button-inverse`, etc.)
+
+### 🎯 **Benefícios da Estratégia**
+
+1. **UX Simplificada**: Usuário ajusta apenas cores da paleta central, sem navegar por múltiplos controles
+2. **Consistência Visual**: Cores principais são centralizadas e coerentes em todo o site
+3. **Flexibilidade Específica**: Controles avançados disponíveis onde a personalização granular é realmente necessária
+4. **Manutenção Facilitada**: Mudanças globais feitas em um local central
+
+### 📍 **Resultado no WordPress**
+
+No **WordPress Admin → Appearance → Editor → Global Styles → Colors**, o usuário verá:
+
+```
+✅ DISPONÍVEL:
+- Color Palette (paleta semântica completa)
+- Headings (controles H1, H2, H3, H4, H5, H6)
+- Links (normal, hover, etc.)
+
+❌ NÃO DISPONÍVEL:
+- Text Color (usa paleta)
+- Background Color (usa paleta) 
+- Captions (usa paleta)
+- Buttons (usa paleta)
 ```
 
 ## 📊 Tokens Semânticos Disponíveis
