@@ -1,7 +1,7 @@
 # 🎨 Sistema de Conversão Semântica de Cores
 
-[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](CHANGELOG.md)
-[![Status](https://img.shields.io/badge/status-Initial%20Beta-orange.svg)](#)
+[![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)](CHANGELOG.md)
+[![Status](https://img.shields.io/badge/status-CSV%20Tokens%20Beta-orange.svg)](#)
 [![Node](https://img.shields.io/badge/node-%3E%3D14.0.0-green.svg)](#)
 
 ## Visão Geral
@@ -68,13 +68,8 @@ npm run semantic-colors:dry-run
 # ⚠️ IMPORTANTE: Sempre faça backup antes!
 # O script cria backups automáticos, mas é recomendado fazer backup manual
 
-# Conversão completa
+# Conversão completa (recomendado)
 npm run semantic-colors
-
-# Ou processar por etapas
-npm run semantic-colors:theme    # Primeiro o theme.json
-npm run semantic-colors:css      # Depois os arquivos CSS
-npm run semantic-colors:php      # Por último os arquivos PHP
 ```
 
 ### 🔄 Workflow Recomendado
@@ -89,7 +84,7 @@ cd /wp-content/themes/meu-tema/
 # [seguir passos de instalação acima]
 
 # 3. Conversão inicial
-npm run semantic-colors --validate
+npm run semantic-colors
 
 # 4. Testar no WordPress
 # - Upload do tema
@@ -198,26 +193,14 @@ ls -la _tools/logs/  # Deve permitir escrita
 ## 🚀 Uso Rápido
 
 ```bash
-# Conversão completa
+# Conversão completa (recomendado)
 npm run semantic-colors
 
-# Processar apenas CSS
-npm run semantic-colors:css
+# Verificar versão
+npm run semantic-colors:version
 
-# Processar apenas PHP  
-npm run semantic-colors:php
-
-# Processar apenas theme.json
-npm run semantic-colors:theme
-
-# Teste sem modificar arquivos
-node _tools/semantic-colors.js --dry-run
-
-# Com validação completa
-node _tools/semantic-colors.js --validate
-
-# Processamento paralelo
-node _tools/semantic-colors.js --parallel
+# Ajuda
+npm run semantic-colors:help
 ```
 
 ## 📊 Tokens Semânticos Disponíveis
@@ -350,6 +333,28 @@ const LOGGING_SETTINGS = {
 };
 ```
 
+---
+
+## 🏗️ Diretrizes para Arquitetura Modular
+
+1. **Nunca adicione scripts soltos em `_tools/`**  
+   Sempre utilize ou estenda os módulos existentes em `_tools/processors/`, `_tools/utils/` ou subpastas apropriadas.
+
+2. **Extensão de Funcionalidade**  
+   - Para novas features de processamento, crie um novo módulo em `_tools/processors/` ou adicione métodos a processadores existentes.
+   - Use composição ou hooks se o processador já suportar.
+
+3. **Responsabilidade Única**  
+   Cada processador deve ser responsável por um tipo de arquivo ou transformação.
+
+4. **Integração no Pipeline**  
+   Toda nova feature deve ser integrada ao pipeline principal em `_tools/semantic-colors.js` via processadores, nunca por scripts avulsos.
+
+5. **Validação e Testes**  
+   Sempre valide a saída e adicione testes automatizados para novas features.
+
+---
+
 ## 📝 Exemplos de Conversão
 
 ### theme.json
@@ -475,7 +480,7 @@ O sistema valida automaticamente:
 2. **Exportar tema** para WordPress
 3. **Executar conversão semântica**:
    ```bash
-   node _tools/semantic-colors.js --validate
+   npm run semantic-colors
    ```
 4. **Testar no WordPress** Global Styles
 5. **Iterar** conforme necessário
@@ -526,13 +531,12 @@ SEMANTIC_PALETTE.push({
 
 Este projeto usa [Versionamento Semântico](https://semver.org/lang/pt-BR/):
 
-- **0.1.1** (Atual): Beta inicial com versionamento e .gitignore
-- **0.2.x** (Planejado): Beta avançado com otimizações
+- **0.2.0** (Atual): CSV Tokens Beta com correções integradas
+- **0.3.x** (Planejado): Beta avançado com otimizações
 - **1.0.0** (Futuro): Versão estável com API consolidada
 
 ### Verificar Versão
 ```bash
-node _tools/semantic-colors.js --version
 npm run semantic-colors:version
 ```
 
@@ -545,8 +549,8 @@ Consulte o [CHANGELOG.md](CHANGELOG.md) para ver todas as mudanças detalhadas.
 
 Para problemas ou dúvidas:
 1. Verifique os logs em `_tools/logs/`
-2. Execute com `--debug` para mais detalhes
-3. Use `--dry-run` para testar sem riscos
+2. Execute `npm run semantic-colors:help` para ajuda
+3. Consulte o [CHANGELOG.md](CHANGELOG.md) para mudanças
 
-**Versão:** 1.0.0  
-**Última atualização:** 2025-08-19
+**Versão:** 0.2.0  
+**Última atualização:** 2025-08-25

@@ -6,6 +6,8 @@ background,bg-base,bg-white,#ffffff,255 255 255,"Fundo base","Fundo principal do
 background,bg-subtle,bg-gray-200,#e5e7eb,229 231 235,"Fundo sutil","Fundo secundário do sistema",active
 text,text-base,text-gray-900,#111827,17 24 39,"Texto base","Cor principal de texto",active
 text,text-subtle,text-gray-800,#1f2937,31 41 55,"Texto sutil","Cor secundária de texto",active
+text,text-inverse,text-white,#ffffff,255 255 255,"Texto invertido","Cor invertida de texto",active
+text,text-subtle-2,text-gray-700,#374151,55 65 81,"Texto sutil 2","Cor secundária de texto",active
 border,border-base,border-gray-400,#9ca3af,156 163 175,"Borda base","Cor padrão de bordas",active
 button,button-base,bg-blue-600,#2563eb,37 99 235,"Botão base","Cor principal de botões",active
 button,button-inverse,bg-transparent,#00000000,0 0 0 0,"Botão inverso","Botão com fundo transparente",active
