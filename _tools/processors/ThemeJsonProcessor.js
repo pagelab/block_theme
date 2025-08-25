@@ -340,7 +340,7 @@ class ThemeJsonProcessor extends BaseProcessor {
       convertedAt: timestamp,
       originalColorsCount: originalPalette.length,
       semanticTokensCount: this.semanticPalette.length,
-      toolVersion: VERSION_INFO.VERSION
+      toolVersion: VERSION_INFO.version
     };
 
     // Adicionar como propriedade personalizada (será ignorada pelo WordPress)

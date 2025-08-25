@@ -535,10 +535,10 @@ class SemanticColorsPipeline {
     
     // Verificar flag de versão
     if (args.includes('--version') || args.includes('-v')) {
-      console.log(`🎨 Semantic Colors Tool v${VERSION_INFO.VERSION} (${VERSION_INFO.VERSION_NAME})`);
-      console.log(`📅 Released: ${VERSION_INFO.RELEASE_DATE}`);
-      console.log(`📋 Changelog: ${VERSION_INFO.CHANGELOG_URL}`);
-      console.log(`⚙️  Node.js: ${VERSION_INFO.MINIMUM_NODE_VERSION}+ required`);
+      console.log(`🎨 Semantic Colors Tool v${VERSION_INFO.version} (${VERSION_INFO.description})`);
+      console.log(`📅 Released: ${VERSION_INFO.releaseDate}`);
+      console.log(`📋 Author: ${VERSION_INFO.author}`);
+      console.log(`⚙️  Node.js: ${process.version} (${process.arch})`);
       process.exit(0);
     }
     
@@ -586,7 +586,7 @@ class SemanticColorsPipeline {
    * Mostrar ajuda
    */
   showHelp() {
-    console.log(`🎨 Script de Conversão Semântica de Cores v${VERSION_INFO.VERSION}`);
+    console.log(`🎨 Script de Conversão Semântica de Cores v${VERSION_INFO.version}`);
     console.log('=====================================================');
     console.log('');
     console.log('Uso: node _tools/semantic-colors.js [opções]');
