@@ -17,8 +17,12 @@ const { chooseProcessingMethod } = require('../config/processing-matrix');
 class CssProcessor extends BaseProcessor {
   constructor(logger = null) {
     super(logger);
-    this.tokenManager = new TokenManager();
+    // Set correct CSV path (one level up from _tools directory)
+    const path = require('path');
+    const csvPath = path.join(__dirname, '..', '..', 'semantic-tokens.csv');
+    this.tokenManager = new TokenManager(csvPath);
     this.colorMapping = this.tokenManager.getTailwindMapping();
+    this.gradientMapping = this.tokenManager.buildGradientMapping();
     this.proseMapping = PROSE_VARIABLE_MAPPING;
     this.patterns = CSS_PATTERNS;
     
@@ -81,6 +85,12 @@ class CssProcessor extends BaseProcessor {
 
       // Processar variáveis prose independentemente do método
       processedContent = await this.processProseVariables(processedContent);
+
+      // Processar gradientes
+      processedContent = await this.processGradientClasses(processedContent);
+
+      // Limpar classes de gradiente não utilizadas
+      processedContent = this.removeUnusedGradientClasses(processedContent);
 
       // Validar resultado
       if (!this.validateProcessedCss(processedContent)) {
@@ -582,6 +592,67 @@ class CssProcessor extends BaseProcessor {
       ((report.sizeBefore - report.sizeAfter) / report.sizeBefore * 100).toFixed(2) + '%' : '0%';
 
     return report;
+  }
+
+  /**
+   * Processar classes de gradiente
+   * @param {string} content - Conteúdo CSS
+   * @returns {Promise<string>} Conteúdo processado
+   */
+  async processGradientClasses(content) {
+    this.log('debug', 'Processando classes de gradiente');
+
+    for (const [tailwindClass, semanticClass] of Object.entries(this.gradientMapping)) {
+      // Escapar caracteres especiais no regex
+      const escapedClass = tailwindClass.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      
+      // Criar regex para capturar a classe CSS completa
+      const classRegex = new RegExp(`\\.${escapedClass}\\s*{([^}]*)}`, 'g');
+      
+      content = content.replace(classRegex, (match, styles) => {
+        // Substituir por classe semântica com variável de gradiente
+        const newStyles = `background: var(--wp--preset--gradient--${semanticClass});`;
+        
+        this.log('debug', `Gradiente convertido: ${tailwindClass} → ${semanticClass}`);
+        
+        return `.${semanticClass} { ${newStyles} }`;
+      });
+    }
+
+    return content;
+  }
+
+  /**
+   * Remover classes de gradiente não utilizadas
+   * @param {string} content - Conteúdo CSS
+   * @returns {string} Conteúdo processado
+   */
+  removeUnusedGradientClasses(content) {
+    this.log('debug', 'Removendo classes de gradiente não utilizadas');
+
+    // Padrões de classes auxiliares de gradiente que podem ser removidas
+    const unusedPatterns = [
+      /\.from-[\w-]+\s*{[^}]*}/g,
+      /\.via-[\w-]+\s*{[^}]*}/g,
+      /\.to-[\w-]+\s*{[^}]*}/g,
+      /\.bg-gradient-to-[\w]+\s*{[^}]*}/g // Manter apenas se não está sendo usado por gradientes semânticos
+    ];
+
+    let removedCount = 0;
+    
+    unusedPatterns.forEach(pattern => {
+      const matches = content.match(pattern);
+      if (matches) {
+        removedCount += matches.length;
+        content = content.replace(pattern, '');
+      }
+    });
+
+    if (removedCount > 0) {
+      this.log('debug', `Removidas ${removedCount} classes de gradiente não utilizadas`);
+    }
+
+    return content;
   }
 }
 

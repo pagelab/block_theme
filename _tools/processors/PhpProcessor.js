@@ -13,8 +13,12 @@ const { chooseProcessingMethod } = require('../config/processing-matrix');
 class PhpProcessor extends BaseProcessor {
   constructor(logger = null) {
     super(logger);
-    this.tokenManager = new TokenManager();
+    // Set correct CSV path (one level up from _tools directory)
+    const path = require('path');
+    const csvPath = path.join(__dirname, '..', '..', 'semantic-tokens.csv');
+    this.tokenManager = new TokenManager(csvPath);
     this.colorMapping = this.tokenManager.getTailwindMapping();
+    this.gradientMapping = this.tokenManager.buildGradientMapping();
     this.patterns = PHP_PATTERNS;
     
     // Contextos PHP válidos para modificação
@@ -165,9 +169,13 @@ class PhpProcessor extends BaseProcessor {
 
     // Dividir classes por espaços
     const classes = classString.trim().split(/\s+/);
-    const processedClasses = [];
+    let processedClasses = [];
 
-    for (const className of classes) {
+    // Primeiro, processar gradientes complexos
+    const gradientProcessed = this.processGradientClasses(classes);
+    
+    // Depois processar cores individuais
+    for (const className of gradientProcessed) {
       // Verificar se é uma classe Tailwind mapeada
       const semanticToken = this.colorMapping[className];
       
@@ -181,6 +189,47 @@ class PhpProcessor extends BaseProcessor {
     }
 
     return processedClasses.join(' ');
+  }
+
+  /**
+   * Processar classes de gradiente Tailwind para classes semânticas
+   * @param {string[]} classes - Array de classes CSS
+   * @returns {string[]} Array de classes processadas
+   */
+  processGradientClasses(classes) {
+    if (!this.gradientMapping || Object.keys(this.gradientMapping).length === 0) {
+      return classes;
+    }
+
+    const processedClasses = [...classes];
+    
+    // Verificar cada mapeamento de gradiente
+    for (const [tailwindClasses, semanticClass] of Object.entries(this.gradientMapping)) {
+      const requiredClasses = tailwindClasses.trim().split(/\s+/);
+      
+      // Verificar se todas as classes do gradiente estão presentes
+      const hasAllClasses = requiredClasses.every(reqClass => 
+        processedClasses.includes(reqClass)
+      );
+      
+      if (hasAllClasses) {
+        this.log('debug', `Convertendo gradiente: ${tailwindClasses} → ${semanticClass}`);
+        
+        // Remover todas as classes do gradiente original
+        requiredClasses.forEach(className => {
+          const index = processedClasses.indexOf(className);
+          if (index > -1) {
+            processedClasses.splice(index, 1);
+          }
+        });
+        
+        // Adicionar a classe semântica
+        processedClasses.push(semanticClass);
+        break; // Processar apenas um gradiente por vez
+      }
+    }
+    
+    return processedClasses;
   }
 
   /**

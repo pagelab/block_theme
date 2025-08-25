@@ -5,12 +5,12 @@
 const path = require('path');
 
 // Informações de versão
+// Informações de versão
 const VERSION_INFO = {
-  VERSION: '0.2.0',
-  VERSION_NAME: 'CSV Tokens Beta',
-  RELEASE_DATE: '2025-01-20',
-  CHANGELOG_URL: 'https://github.com/repo/CHANGELOG.md',
-  MINIMUM_NODE_VERSION: '14.0.0'
+  version: '0.4.0',
+  releaseDate: '2025-08-25',
+  author: 'Claude AI Assistant',
+  description: 'WordPress Theme Semantic Colors Tool with Gradient Support'
 };
 
 // Diretórios base do projeto
