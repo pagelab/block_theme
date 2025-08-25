@@ -423,95 +423,8 @@ class CssProcessor extends BaseProcessor {
    * @returns {string} Conteúdo processado
    */
   replaceHardcodedValues(content) {
-    // Mapeamento de valores RGB para variáveis semânticas baseado na SEMANTIC_PALETTE
-    const rgbToSemanticMapping = {
-      // Cores da marca
-      'rgb(29 78 216)': 'var(--wp--preset--color--brand-bg-base)',
-      'rgb(29,78,216)': 'var(--wp--preset--color--brand-bg-base)',
-      'rgba(29,78,216,1)': 'var(--wp--preset--color--brand-bg-base)',
-      
-      'rgb(22 163 74)': 'var(--wp--preset--color--brand-bg-alt)',
-      'rgb(22,163,74)': 'var(--wp--preset--color--brand-bg-alt)',
-      'rgba(22,163,74,1)': 'var(--wp--preset--color--brand-bg-alt)',
-      
-      'rgb(220 38 38)': 'var(--wp--preset--color--brand-bg-accent)',
-      'rgb(220,38,38)': 'var(--wp--preset--color--brand-bg-accent)',
-      'rgba(220,38,38,1)': 'var(--wp--preset--color--brand-bg-accent)',
-
-      // Cores de fundo
-      'rgb(255 255 255)': 'var(--wp--preset--color--bg-base)',
-      'rgb(255,255,255)': 'var(--wp--preset--color--bg-base)',
-      'rgba(255,255,255,1)': 'var(--wp--preset--color--bg-base)',
-      '#ffffff': 'var(--wp--preset--color--bg-base)',
-      '#fff': 'var(--wp--preset--color--bg-base)',
-      'white': 'var(--wp--preset--color--bg-base)',
-      
-      'rgb(229 231 235)': 'var(--wp--preset--color--bg-subtle)',
-      'rgb(229,231,235)': 'var(--wp--preset--color--bg-subtle)',
-      'rgba(229,231,235,1)': 'var(--wp--preset--color--bg-subtle)',
-      
-      'rgb(3 7 18)': 'var(--wp--preset--color--bg-inverse)',
-      'rgb(3,7,18)': 'var(--wp--preset--color--bg-inverse)',
-      'rgba(3,7,18,1)': 'var(--wp--preset--color--bg-inverse)',
-      
-      'rgb(17 24 39)': 'var(--wp--preset--color--bg-inverse-subtle)',
-      'rgb(17,24,39)': 'var(--wp--preset--color--bg-inverse-subtle)',
-      'rgba(17,24,39,1)': 'var(--wp--preset--color--bg-inverse-subtle)',
-
-      // Cores de texto
-      'rgb(17 24 39)': 'var(--wp--preset--color--text-base)',
-      'rgb(17,24,39)': 'var(--wp--preset--color--text-base)',
-      
-      'rgb(31 41 55)': 'var(--wp--preset--color--text-subtle)',
-      'rgb(31,41,55)': 'var(--wp--preset--color--text-subtle)',
-      'rgba(31,41,55,1)': 'var(--wp--preset--color--text-subtle)',
-      
-      'rgb(249 250 251)': 'var(--wp--preset--color--text-inverse)',
-      'rgb(249,250,251)': 'var(--wp--preset--color--text-inverse)',
-      'rgba(249,250,251,1)': 'var(--wp--preset--color--text-inverse)',
-      
-      'rgb(209 213 219)': 'var(--wp--preset--color--text-inverse-subtle)',
-      'rgb(209,213,219)': 'var(--wp--preset--color--text-inverse-subtle)',
-      'rgba(209,213,219,1)': 'var(--wp--preset--color--text-inverse-subtle)',
-
-      // Cores de borda
-      'rgb(156 163 175)': 'var(--wp--preset--color--border-base)',
-      'rgb(156,163,175)': 'var(--wp--preset--color--border-base)',
-      'rgba(156,163,175,1)': 'var(--wp--preset--color--border-base)',
-
-      // Cores de feedback
-      'rgb(187 247 208)': 'var(--wp--preset--color--bg-success)',
-      'rgb(187,247,208)': 'var(--wp--preset--color--bg-success)',
-      'rgba(187,247,208,1)': 'var(--wp--preset--color--bg-success)',
-      
-      'rgb(254 240 138)': 'var(--wp--preset--color--bg-warning)',
-      'rgb(254,240,138)': 'var(--wp--preset--color--bg-warning)',
-      'rgba(254,240,138,1)': 'var(--wp--preset--color--bg-warning)',
-      
-      'rgb(254 202 202)': 'var(--wp--preset--color--bg-error)',
-      'rgb(254,202,202)': 'var(--wp--preset--color--bg-error)',
-      'rgba(254,202,202,1)': 'var(--wp--preset--color--bg-error)',
-      
-      'rgb(191 219 254)': 'var(--wp--preset--color--bg-info)',
-      'rgb(191,219,254)': 'var(--wp--preset--color--bg-info)',
-      'rgba(191,219,254,1)': 'var(--wp--preset--color--bg-info)',
-
-      // Cores de elementos
-      'rgb(37 99 235)': 'var(--wp--preset--color--button-base)',
-      'rgb(37,99,235)': 'var(--wp--preset--color--button-base)',
-      'rgba(37,99,235,1)': 'var(--wp--preset--color--button-base)',
-      
-      'rgba(0,0,0,0)': 'var(--wp--preset--color--button-inverse)',
-      'transparent': 'var(--wp--preset--color--button-inverse)',
-      
-      'rgb(239 68 68)': 'var(--wp--preset--color--button-accent)',
-      'rgb(239,68,68)': 'var(--wp--preset--color--button-accent)',
-      'rgba(239,68,68,1)': 'var(--wp--preset--color--button-accent)',
-      
-      'rgb(243 244 246)': 'var(--wp--preset--color--card)',
-      'rgb(243,244,246)': 'var(--wp--preset--color--card)',
-      'rgba(243,244,246,1)': 'var(--wp--preset--color--card)'
-    };
+    // Obter mapeamento dinâmico baseado na paleta semântica atual
+    const rgbToSemanticMapping = this.buildRgbToSemanticMapping();
 
     let processed = content;
 
@@ -528,11 +441,43 @@ class CssProcessor extends BaseProcessor {
       /rgb\((\d+)\s+(\d+)\s+(\d+)\s*\/\s*var\(--tw-[\w-]*-opacity\)\)/g,
       (match, r, g, b) => {
         const rgbValue = `rgb(${r} ${g} ${b})`;
-        return rgbToSemanticMapping[rgbValue] || match;
+        const rgbValueComma = `rgb(${r},${g},${b})`;
+        return rgbToSemanticMapping[rgbValue] || rgbToSemanticMapping[rgbValueComma] || match;
       }
     );
 
     return processed;
+  }
+
+  /**
+   * Construir mapeamento dinâmico de RGB para variáveis semânticas
+   * @returns {object} Mapeamento RGB -> variável semântica
+   */
+  buildRgbToSemanticMapping() {
+    const mapping = {};
+    const semanticPalette = this.tokenManager.getSemanticPalette();
+    
+    for (const token of semanticPalette) {
+      const { color, slug } = token;
+      const semanticVar = `var(--wp--preset--color--${slug})`;
+      
+      // Extrair valores RGB do formato rgba(r,g,b,a)
+      const rgbaMatch = color.match(/rgba?\((\d+),(\d+),(\d+)(?:,[\d.]+)?\)/);
+      if (rgbaMatch) {
+        const [, r, g, b] = rgbaMatch;
+        
+        // Adicionar todas as variações possíveis de formato
+        mapping[`rgb(${r} ${g} ${b})`] = semanticVar;
+        mapping[`rgb(${r},${g},${b})`] = semanticVar;
+        mapping[`rgba(${r},${g},${b},1)`] = semanticVar;
+        mapping[`rgb(${r} ${g} ${b} / var(--tw-bg-opacity))`] = semanticVar;
+        mapping[`rgb(${r} ${g} ${b} / var(--tw-text-opacity))`] = semanticVar;
+        mapping[`rgb(${r} ${g} ${b} / var(--tw-border-opacity))`] = semanticVar;
+      }
+    }
+    
+    this.log('debug', `Mapeamento RGB construído: ${Object.keys(mapping).length} variações`);
+    return mapping;
   }
 
   /**

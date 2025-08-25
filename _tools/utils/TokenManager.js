@@ -74,7 +74,7 @@ class TokenManager {
 
   getSemanticPalette() {
     return this.tokens.map(token => ({
-      color: `rgba(${token.colorRgb.replace(' ', ',')},1)`,
+      color: `rgba(${token.colorRgb.replace(/\s+/g, ',')},1)`,
       name: token.name,
       slug: token.slug
     }));
