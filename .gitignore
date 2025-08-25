@@ -211,3 +211,5 @@ vite.config.js
 # - São gerados pelo Pinegrow
 # - Devem ser exportados novamente antes de usar o semantic-colors.js
 # - Não fazem parte do sistema de conversão semântica
+*.backup-*
+theme.json.backup-*

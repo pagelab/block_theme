@@ -13,7 +13,23 @@ class ThemeJsonProcessor extends BaseProcessor {
   constructor(logger = null) {
     super(logger);
     this.tokenManager = new TokenManager();
-    this.semanticPalette = this.tokenManager.getSemanticPalette();
+    // Corrigir todos os tokens semânticos ao inicializar
+    this.semanticPalette = this.tokenManager.getSemanticPalette().map(token => this.normalizeToken(token));
+  }
+
+  // Normaliza um token: corrige RGB, aspas e acentos
+  normalizeToken(token) {
+    const normalized = { ...token };
+    // Corrigir sintaxe RGB/RGBA
+    if (typeof normalized.color === 'string') {
+      normalized.color = this.fixRgbaSyntax(normalized.color);
+    }
+    // Corrigir aspas escapadas em name
+    if (typeof normalized.name === 'string') {
+      normalized.name = normalized.name.replace(/^\\?"|\\?"$/g, ''); // remove aspas duplas no início/fim
+      normalized.name = this.escapeUnicodeInNames({ name: normalized.name }).name;
+    }
+    return normalized;
   }
 
   /**
@@ -30,14 +46,21 @@ class ThemeJsonProcessor extends BaseProcessor {
     }
 
     return await this.measurePerformance('theme.json processing', async () => {
+      // 1. Corrigir sintaxe RGB/RGBA e aspas escapadas antes do parse
+      let fixedContent = this.fixRgbaSyntax(content);
+      fixedContent = this.fixEscapedQuotes(fixedContent);
+
       // Parse do JSON
       let themeData;
       try {
-        themeData = JSON.parse(content);
+        themeData = JSON.parse(fixedContent);
       } catch (error) {
         this.log('error', `Erro ao parsear JSON: ${filePath}`, error);
         throw new Error(`JSON inválido em ${filePath}: ${error.message}`);
       }
+
+      // 2. Escapar Unicode em todos os atributos "name"
+      themeData = this.escapeUnicodeInNames(themeData);
 
       // Validar estrutura básica
       if (!this.validateThemeStructure(themeData)) {
@@ -64,6 +87,71 @@ class ThemeJsonProcessor extends BaseProcessor {
       // Retornar JSON formatado
       return JSON.stringify(themeData, null, 2);
     });
+  }
+
+  // Corrigir sintaxe RGB/RGBA
+  fixRgbaSyntax(content) {
+    let processed = content;
+    // Padrão 1: "rgba(29,78 216,1)" -> "rgba(29,78,216,1)"
+    processed = processed.replace(
+      /(rgba?)\((\d+),(\d+)\s+(\d+)(?:,([^)]+))?\)/g,
+      (match, func, r, g, b, a) => {
+        if (a !== undefined) {
+          return `${func}(${r},${g},${b},${a})`;
+        } else {
+          return `${func}(${r},${g},${b})`;
+        }
+      }
+    );
+    // Padrão 2: "rgba(0,0 0,1)" -> "rgba(0,0,0,1)"
+    processed = processed.replace(
+      /(rgba?)\((\d+),(\d+)\s+(\d+)\s+(\d+)(?:,([^)]+))?\)/g,
+      (match, func, r, g, b1, b2, a) => {
+        if (a !== undefined) {
+          return `${func}(${r},${g},${b1},${b2},${a})`;
+        } else {
+          return `${func}(${r},${g},${b1},${b2})`;
+        }
+      }
+    );
+    // Padrão 3: "rgba(29,78,216 1)" -> "rgba(29,78,216,1)"
+    processed = processed.replace(
+      /(rgba?)\((\d+),(\d+),(\d+)\s+([\d\.]+)\)/g,
+      '$1($2,$3,$4,$5)'
+    );
+    return processed;
+  }
+
+  // Remover aspas escapadas em atributos name
+  fixEscapedQuotes(content) {
+    const escapedQuotesRegex = /"name":\s*"\\\"([^\\]+)\\\""/g;
+    return content.replace(escapedQuotesRegex, '"name": "$1"');
+  }
+
+  // Escapar Unicode em todos os atributos name
+  escapeUnicodeInNames(jsonObj) {
+    function processObject(obj) {
+      if (!obj || typeof obj !== 'object') return obj;
+      if (Array.isArray(obj)) {
+        return obj.map(item => processObject(item));
+      }
+      const result = {};
+      for (const key in obj) {
+        if (key === 'name' && typeof obj[key] === 'string') {
+          result[key] = escapeUnicode(obj[key]);
+        } else {
+          result[key] = processObject(obj[key]);
+        }
+      }
+      return result;
+    }
+    function escapeUnicode(str) {
+      return str.replace(/[^\x00-\x7F]/g, char => {
+        const code = char.charCodeAt(0).toString(16).padStart(4, '0');
+        return `\\u${code}`;
+      });
+    }
+    return processObject(jsonObj);
   }
 
   /**
