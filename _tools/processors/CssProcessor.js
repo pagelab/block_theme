@@ -595,29 +595,32 @@ class CssProcessor extends BaseProcessor {
   }
 
   /**
-   * Processar classes de gradiente
+   * Processar classes de gradiente - adicionar classes semânticas
    * @param {string} content - Conteúdo CSS
    * @returns {Promise<string>} Conteúdo processado
    */
   async processGradientClasses(content) {
     this.log('debug', 'Processando classes de gradiente');
 
-    for (const [tailwindClass, semanticClass] of Object.entries(this.gradientMapping)) {
-      // Escapar caracteres especiais no regex
-      const escapedClass = tailwindClass.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      
-      // Criar regex para capturar a classe CSS completa
-      const classRegex = new RegExp(`\\.${escapedClass}\\s*{([^}]*)}`, 'g');
-      
-      content = content.replace(classRegex, (match, styles) => {
-        // Substituir por classe semântica com variável de gradiente
-        const newStyles = `background: var(--wp--preset--gradient--${semanticClass});`;
-        
-        this.log('debug', `Gradiente convertido: ${tailwindClass} → ${semanticClass}`);
-        
-        return `.${semanticClass} { ${newStyles} }`;
-      });
+    // Se não há gradientes, retorna o conteúdo original
+    if (!this.gradientMapping || Object.keys(this.gradientMapping).length === 0) {
+      return content;
     }
+
+    // Adicionar classes semânticas de gradiente ao final do CSS
+    let gradientClasses = '\n\n/* Semantic Gradient Classes */\n';
+    
+    for (const [tailwindClass, semanticClass] of Object.entries(this.gradientMapping)) {
+      // Adicionar classe semântica que usa a variável CSS do WordPress
+      gradientClasses += `.${semanticClass} {\n`;
+      gradientClasses += `  background: var(--wp--preset--gradient--${semanticClass}) !important;\n`;
+      gradientClasses += `}\n\n`;
+      
+      this.log('debug', `Classe de gradiente adicionada: .${semanticClass}`);
+    }
+
+    // Adicionar as classes semânticas ao final do CSS
+    content += gradientClasses;
 
     return content;
   }
