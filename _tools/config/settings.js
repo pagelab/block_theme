@@ -7,8 +7,8 @@ const path = require('path');
 // Informações de versão
 // Informações de versão
 const VERSION_INFO = {
-  version: '0.4.0',
-  releaseDate: '2025-08-25',
+  version: '0.4.4',
+  releaseDate: '2025-08-26',
   author: 'Claude AI Assistant',
   description: 'WordPress Theme Semantic Colors Tool with Gradient Support'
 };

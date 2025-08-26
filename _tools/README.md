@@ -64,10 +64,13 @@ node semantic-colors.js --debug --all
 3. **Verificar logs:** Consultar `_tools/logs/` para resultados
 4. **Validar saída:** Testar no WordPress/Block Editor
 
+
 ## 📊 Versionamento
 
+- **v0.4.4** - Limpeza de tokens: retorno ao design original
+- **v0.4.3** - Limpeza arquitetural e documentação completa
 - **v0.4.2** - Arquitetura completa com JavaScript processing
-- **v0.4.1** - PHP e ThemeJson integration  
+- **v0.4.1** - PHP e ThemeJson integration
 - **v0.4.0** - CSS processing e base modular
 
 ## 🧰 Ferramentas de Debug
@@ -103,6 +106,12 @@ O `PhpProcessor` processa arquivos de bloco PHP para renderização server-side.
 
 ---
 
-**Sistema de Tokens Semânticos v0.4.2**  
+**Sistema de Tokens Semânticos v0.4.4**  
 **Arquitetura Modular Completa**  
 **WordPress Block Theme Compatible**
+
+## 📦 Checar versão do sistema
+
+```bash
+node _tools/semantic-colors.js --version
+```
