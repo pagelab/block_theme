@@ -11,6 +11,42 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - Suporte a custom properties CSS adicionais
 - Integração com build tools (Webpack, Vite)
 - Validação automática de sintaxe
+- Suporte a múltiplos gradientes no mesmo elemento
+
+## [0.4.0] - 2025-08-25
+### Adicionado
+- **🎨 Suporte a Gradientes Semânticos** - Sistema completo para converter gradientes Tailwind em tokens semânticos
+- **CSV Enhanced Parser** - Parser CSV robusto que suporta campos com aspas contendo vírgulas
+- **Gradient Column** - Nova coluna `gradient_css` no CSV para especificar gradientes CSS nativos
+- **ThemeJsonProcessor Gradients** - Integração com WordPress Global Styles para adicionar gradientes à paleta
+- **CssProcessor Gradients** - Conversão de classes `.bg-gradient-*` para `var(--wp--preset--gradient--*)`
+- **PhpProcessor Gradients** - Conversão de classes complexas como `bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500` para `bg-gradient-1`
+
+### Melhorado
+- **TokenManager** - Métodos específicos para gradientes: `getGradientTokens()` e `buildGradientMapping()`
+- **CSV Path Resolution** - Correção do caminho CSV para funcionar corretamente quando executado do diretório `_tools`
+- **Modular Architecture** - Cada processor agora suporta gradientes de forma independente
+- **Debug Logging** - Logs detalhados para conversão de gradientes com before/after
+
+### Transformações Implementadas
+- **CSV → theme.json**: `gradient_css` → `settings.color.gradients[]`
+- **Tailwind → CSS**: `.bg-gradient-to-r` → `var(--wp--preset--gradient--bg-gradient-1)`
+- **Complex → Simple PHP**: `bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500` → `bg-gradient-1`
+
+### Exemplo Prático
+```php
+// Antes
+<div class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+
+// Depois  
+<div class="bg-gradient-1">
+```
+
+### Técnico
+- **Feature Branch Workflow** - Implementação em branch `feature/v0.4.0-semantic-gradients`
+- **Enhanced CSV Structure** - Suporte a tokens de categoria `gradient` com CSS personalizado
+- **WordPress Integration** - Gradientes aparecem no painel de cores do editor de blocos
+- **Backward Compatibility** - Sistema mantém compatibilidade com tokens de cor existentes
 
 ## [0.1.1] - 2025-08-20
 ### Adicionado

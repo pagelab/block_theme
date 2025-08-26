@@ -1,8 +1,24 @@
-category,slug,tailwind_class,color_hex,color_rgb,name,description,status
-brand,brand-bg-base,bg-blue-700,#1d4ed8,29 78 216,"Marca (fundo base)","Cor de fundo principal da marca",active
+category,slug,tailwind_class,color_hex,color_rgb,name,description,status,gradient_css
+brand,brand-bg-base,bg-blue-700,#1d4ed8,29 78 216,"Marca (fundo base)","Cor de fundo principal da marca",active,
 brand,brand-bg-alt,bg-green-600,#16a34a,22 163 74,"Marca (fundo alternativo)","Cor secundária da marca",active
-brand,brand-bg-accent,bg-red-600,#dc2626,220 38 38,"Marca (fundo acento)","Cor de destaque da marca",active
-background,bg-base,bg-white,#ffffff,255 255 255,"Fundo base","Fundo principal do sistema",active
+brand,brand-bg-accent,bg-blue-600,#2563eb,37 99 235,"Marca (fundo accent)","Cor de fundo secundária da marca",active,
+brand,brand-text-primary,text-blue-700,#1d4ed8,29 78 216,"Marca (texto principal)","Cor de texto principal da marca",active,
+brand,brand-text-secondary,text-blue-600,#2563eb,37 99 235,"Marca (texto secundário)","Cor de texto secundário da marca",active,
+interface,interface-bg-primary,bg-gray-50,#f9fafb,249 250 251,"Interface (fundo principal)","Cor de fundo principal da interface",active,
+interface,interface-bg-secondary,bg-white,#ffffff,255 255 255,"Interface (fundo secundário)","Cor de fundo secundário da interface",active,
+interface,interface-bg-accent,bg-gray-100,#f3f4f6,243 244 246,"Interface (fundo accent)","Cor de fundo de destaque da interface",active,
+interface,interface-text-primary,text-gray-900,#111827,17 24 39,"Interface (texto principal)","Cor de texto principal da interface",active,
+interface,interface-text-secondary,text-gray-600,#4b5563,75 85 99,"Interface (texto secundário)","Cor de texto secundário da interface",active,
+semantic,semantic-success-bg,bg-green-100,#dcfce7,220 252 231,"Sucesso (fundo)","Cor de fundo para mensagens de sucesso",active,
+semantic,semantic-success-text,text-green-800,#166534,22 101 52,"Sucesso (texto)","Cor de texto para mensagens de sucesso",active,
+semantic,semantic-warning-bg,bg-yellow-100,#fef3c7,254 243 199,"Aviso (fundo)","Cor de fundo para mensagens de aviso",active,
+semantic,semantic-warning-text,text-yellow-800,#92400e,146 64 14,"Aviso (texto)","Cor de texto para mensagens de aviso",active,
+semantic,semantic-error-bg,bg-red-100,#fecaca,254 202 202,"Erro (fundo)","Cor de fundo para mensagens de erro",active,
+semantic,semantic-error-text,text-red-800,#991b1b,153 27 27,"Erro (texto)","Cor de texto para mensagens de erro",active,
+interface,text-subtle,text-gray-500,#6b7280,107 114 128,"Texto sutil","Cor de texto para elementos sutis",active,
+interface,text-subtle-2,text-gray-400,#9ca3af,156 163 175,"Texto sutil 2","Cor de texto ainda mais sutil",active,
+interface,bg-hover,bg-gray-200,#e5e7eb,229 231 235,"Fundo hover","Cor de fundo para estado hover",active,
+background,bg-base,bg-white,#ffffff,255 255 255,"Fundo base","Fundo principal do sistema",active,
 background,bg-subtle,bg-gray-200,#e5e7eb,229 231 235,"Fundo sutil","Fundo secundário do sistema",active
 text,text-base,text-gray-900,#111827,17 24 39,"Texto base","Cor principal de texto",active
 text,text-subtle,text-gray-800,#1f2937,31 41 55,"Texto sutil","Cor secundária de texto",active
@@ -14,4 +30,6 @@ state,bg-success,bg-green-200,#bbf7d0,187 247 208,"Sucesso","Cor para estados de
 state,bg-warning,bg-yellow-200,#fef3c7,254 243 199,"Aviso","Cor para estados de aviso",active
 state,bg-error,bg-red-200,#fecaca,254 202 202,"Erro","Cor para estados de erro",active
 state,bg-info,bg-blue-200,#bfdbfe,191 219 254,"Informação","Cor para estados informativos",active
-ui,card,bg-gray-250,#f9fafb,249 250 251,"Card","Fundo para componentes de card",active
+ui,card,bg-gray-250,#f9fafb,249 250 251,"Card","Fundo para componentes de card",active,
+gradient,bg-gradient-1,bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500,#3b82f6,59 130 246,"Degradê 1","Degradê azul-roxo-rosa vibrante",active,"linear-gradient(to right, #3b82f6, #8b5cf6, #ec4899)"
+gradient,bg-gradient-2,bg-gradient-to-br from-green-400 to-blue-600,#4ade80,74 222 128,"Degradê 2","Degradê verde-azul diagonal",active,"linear-gradient(to bottom right, #4ade80, #2563eb)"

@@ -12,7 +12,10 @@ const { VERSION_INFO, COLOR_CONTROLS } = require('../config/settings');
 class ThemeJsonProcessor extends BaseProcessor {
   constructor(logger = null) {
     super(logger);
-    this.tokenManager = new TokenManager();
+    // Set correct CSV path (one level up from _tools directory)
+    const path = require('path');
+    const csvPath = path.join(__dirname, '..', '..', 'semantic-tokens.csv');
+    this.tokenManager = new TokenManager(csvPath);
     // Corrigir todos os tokens semânticos ao inicializar
     this.semanticPalette = this.tokenManager.getSemanticPalette().map(token => this.normalizeToken(token));
   }
@@ -73,6 +76,9 @@ class ThemeJsonProcessor extends BaseProcessor {
 
       // Substituir paleta por tokens semânticos
       themeData = this.replaceColorPalette(themeData);
+
+      // Adicionar gradientes semânticos
+      themeData = this.addSemanticGradients(themeData);
 
       // Adicionar controles de cor granulares
       themeData = this.addColorControlSettings(themeData);
@@ -269,6 +275,49 @@ class ThemeJsonProcessor extends BaseProcessor {
   }
 
   /**
+   * Adicionar gradientes semânticos ao theme.json
+   * @param {object} themeData - Dados do tema
+   * @returns {object} Tema com gradientes semânticos
+   */
+  addSemanticGradients(themeData) {
+    this.log('debug', 'Adicionando gradientes semânticos');
+
+    // Garantir que a estrutura settings.color existe
+    if (!themeData.settings) {
+      themeData.settings = {};
+    }
+    
+    if (!themeData.settings.color) {
+      themeData.settings.color = {};
+    }
+
+    // Obter tokens de gradiente do TokenManager
+    const gradientTokens = this.tokenManager.getGradientTokens();
+    
+    if (gradientTokens.length === 0) {
+      this.log('info', 'Nenhum token de gradiente encontrado');
+      return themeData;
+    }
+
+    // Converter tokens para formato theme.json
+    const gradientPalette = gradientTokens.map(token => ({
+      slug: token.slug,
+      gradient: token.gradientCss,
+      name: token.name
+    }));
+
+    // Escape Unicode characters in names
+    const processedGradientPalette = this.escapeUnicodeInNames(gradientPalette);
+
+    // Substituir ou criar paleta de gradientes
+    themeData.settings.color.gradients = processedGradientPalette;
+
+    this.log('info', `Adicionados ${gradientPalette.length} gradientes semânticos`);
+    
+    return themeData;
+  }
+
+  /**
    * Adicionar metadados sobre a conversão
    * @param {object} themeData - Dados do tema
    * @param {array} originalPalette - Paleta original
@@ -291,7 +340,7 @@ class ThemeJsonProcessor extends BaseProcessor {
       convertedAt: timestamp,
       originalColorsCount: originalPalette.length,
       semanticTokensCount: this.semanticPalette.length,
-      toolVersion: VERSION_INFO.VERSION
+      toolVersion: VERSION_INFO.version
     };
 
     // Adicionar como propriedade personalizada (será ignorada pelo WordPress)

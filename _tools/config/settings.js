@@ -5,12 +5,12 @@
 const path = require('path');
 
 // Informações de versão
+// Informações de versão
 const VERSION_INFO = {
-  VERSION: '0.2.0',
-  VERSION_NAME: 'CSV Tokens Beta',
-  RELEASE_DATE: '2025-01-20',
-  CHANGELOG_URL: 'https://github.com/repo/CHANGELOG.md',
-  MINIMUM_NODE_VERSION: '14.0.0'
+  version: '0.4.0',
+  releaseDate: '2025-08-25',
+  author: 'Claude AI Assistant',
+  description: 'WordPress Theme Semantic Colors Tool with Gradient Support'
 };
 
 // Diretórios base do projeto
@@ -34,7 +34,8 @@ const DIRECTORIES = {
 // Padrões de arquivos a processar
 const FILE_PATTERNS = {
   PHP_FILES: '**/*.php',
-  CSS_FILES: '**/*.css', 
+  CSS_FILES: '**/*.css',
+  JS_FILES: '**/*.js',
   JSON_FILES: '**/theme.json',
   
   // Exclusões
@@ -124,7 +125,8 @@ const FILE_TYPE_SETTINGS = {
 const CLI_FLAGS = {
   // Flags de processamento
   '--css': 'Processar apenas arquivos CSS',
-  '--php': 'Processar apenas arquivos PHP', 
+  '--php': 'Processar apenas arquivos PHP',
+  '--js': 'Processar apenas arquivos JavaScript',
   '--theme': 'Processar apenas theme.json',
   '--all': 'Processar todos os tipos (padrão)',
   

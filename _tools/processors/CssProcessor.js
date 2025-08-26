@@ -17,8 +17,12 @@ const { chooseProcessingMethod } = require('../config/processing-matrix');
 class CssProcessor extends BaseProcessor {
   constructor(logger = null) {
     super(logger);
-    this.tokenManager = new TokenManager();
+    // Set correct CSV path (one level up from _tools directory)
+    const path = require('path');
+    const csvPath = path.join(__dirname, '..', '..', 'semantic-tokens.csv');
+    this.tokenManager = new TokenManager(csvPath);
     this.colorMapping = this.tokenManager.getTailwindMapping();
+    this.gradientMapping = this.tokenManager.buildGradientMapping();
     this.proseMapping = PROSE_VARIABLE_MAPPING;
     this.patterns = CSS_PATTERNS;
     
@@ -81,6 +85,12 @@ class CssProcessor extends BaseProcessor {
 
       // Processar variáveis prose independentemente do método
       processedContent = await this.processProseVariables(processedContent);
+
+      // Processar gradientes
+      processedContent = await this.processGradientClasses(processedContent);
+
+      // Limpar classes de gradiente não utilizadas
+      processedContent = this.removeUnusedGradientClasses(processedContent);
 
       // Validar resultado
       if (!this.validateProcessedCss(processedContent)) {
@@ -582,6 +592,100 @@ class CssProcessor extends BaseProcessor {
       ((report.sizeBefore - report.sizeAfter) / report.sizeBefore * 100).toFixed(2) + '%' : '0%';
 
     return report;
+  }
+
+  /**
+   * Processar classes de gradiente - adicionar classes semânticas
+   * @param {string} content - Conteúdo CSS
+   * @returns {Promise<string>} Conteúdo processado
+   */
+  async processGradientClasses(content) {
+    this.log('debug', 'Processando classes de gradiente');
+
+    // Obter tokens de gradiente diretamente do TokenManager
+    const gradientTokens = this.tokenManager.getGradientTokens();
+    
+    this.log('debug', `Gradientes encontrados: ${gradientTokens.length}`);
+    gradientTokens.forEach(g => this.log('debug', `- ${g.slug}: ${g.name}`));
+
+    // Se não há gradientes, retorna o conteúdo original
+    if (!gradientTokens || gradientTokens.length === 0) {
+      this.log('debug', 'Nenhum gradiente encontrado no CSV');
+      return content;
+    }
+
+    // Adicionar classes semânticas de gradiente
+    let modifiedContent = content;
+    
+    gradientTokens.forEach(token => {
+      const selector = `.${token.slug}`;
+      const rule = `background: var(--wp--preset--gradient--${token.slug});`;
+      
+      // Verificar se a classe já existe
+      if (!modifiedContent.includes(selector)) {
+        modifiedContent = this.addCustomCssRule(modifiedContent, selector, rule);
+        this.log('debug', `Classe de gradiente adicionada: ${selector}`);
+      } else {
+        this.log('debug', `Classe de gradiente já existe: ${selector}`);
+      }
+    });
+
+    return modifiedContent;
+  }
+
+  /**
+   * Adicionar regra CSS customizada ao conteúdo
+   * @param {string} cssContent - Conteúdo CSS atual
+   * @param {string} selector - Seletor CSS
+   * @param {string} rule - Propriedade CSS
+   * @returns {string} Conteúdo CSS modificado
+   */
+  addCustomCssRule(cssContent, selector, rule) {
+    const newRule = `${selector} {\n  ${rule}\n}`;
+    
+    // Adicionar no final do arquivo, antes dos media queries se existirem
+    const mediaQueryIndex = cssContent.lastIndexOf('@media');
+    
+    if (mediaQueryIndex !== -1) {
+      // Inserir antes das media queries
+      return cssContent.slice(0, mediaQueryIndex) + '\n' + newRule + '\n' + cssContent.slice(mediaQueryIndex);
+    } else {
+      // Adicionar no final
+      return cssContent + '\n\n' + newRule;
+    }
+  }
+
+  /**
+   * Remover classes de gradiente não utilizadas
+   * @param {string} content - Conteúdo CSS
+   * @returns {string} Conteúdo processado
+   */
+  removeUnusedGradientClasses(content) {
+    this.log('debug', 'Removendo classes de gradiente não utilizadas');
+
+    // Padrões de classes auxiliares de gradiente que podem ser removidas
+    const unusedPatterns = [
+      /\.from-[\w-]+\s*{[^}]*}/g,
+      /\.via-[\w-]+\s*{[^}]*}/g,
+      /\.to-[\w-]+\s*{[^}]*}/g,
+      /\.bg-gradient-to-[\w]+\s*{[^}]*}/g // Manter apenas se não está sendo usado por gradientes semânticos
+    ];
+
+    let removedCount = 0;
+    
+    unusedPatterns.forEach(pattern => {
+      const matches = content.match(pattern);
+      if (matches) {
+        removedCount += matches.length;
+        content = content.replace(pattern, '');
+      }
+    });
+
+    if (removedCount > 0) {
+      this.log('debug', `Removidas ${removedCount} classes de gradiente não utilizadas`);
+    }
+
+    return content;
   }
 }
 
