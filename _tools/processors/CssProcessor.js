@@ -602,27 +602,57 @@ class CssProcessor extends BaseProcessor {
   async processGradientClasses(content) {
     this.log('debug', 'Processando classes de gradiente');
 
+    // Obter tokens de gradiente diretamente do TokenManager
+    const gradientTokens = this.tokenManager.getGradientTokens();
+    
+    this.log('debug', `Gradientes encontrados: ${gradientTokens.length}`);
+    gradientTokens.forEach(g => this.log('debug', `- ${g.slug}: ${g.name}`));
+
     // Se não há gradientes, retorna o conteúdo original
-    if (!this.gradientMapping || Object.keys(this.gradientMapping).length === 0) {
+    if (!gradientTokens || gradientTokens.length === 0) {
+      this.log('debug', 'Nenhum gradiente encontrado no CSV');
       return content;
     }
 
-    // Adicionar classes semânticas de gradiente ao final do CSS
-    let gradientClasses = '\n\n/* Semantic Gradient Classes */\n';
+    // Adicionar classes semânticas de gradiente
+    let modifiedContent = content;
     
-    for (const [tailwindClass, semanticClass] of Object.entries(this.gradientMapping)) {
-      // Adicionar classe semântica que usa a variável CSS do WordPress
-      gradientClasses += `.${semanticClass} {\n`;
-      gradientClasses += `  background: var(--wp--preset--gradient--${semanticClass}) !important;\n`;
-      gradientClasses += `}\n\n`;
+    gradientTokens.forEach(token => {
+      const selector = `.${token.slug}`;
+      const rule = `background: var(--wp--preset--gradient--${token.slug});`;
       
-      this.log('debug', `Classe de gradiente adicionada: .${semanticClass}`);
+      // Verificar se a classe já existe
+      if (!modifiedContent.includes(selector)) {
+        modifiedContent = this.addCustomCssRule(modifiedContent, selector, rule);
+        this.log('debug', `Classe de gradiente adicionada: ${selector}`);
+      } else {
+        this.log('debug', `Classe de gradiente já existe: ${selector}`);
+      }
+    });
+
+    return modifiedContent;
+  }
+
+  /**
+   * Adicionar regra CSS customizada ao conteúdo
+   * @param {string} cssContent - Conteúdo CSS atual
+   * @param {string} selector - Seletor CSS
+   * @param {string} rule - Propriedade CSS
+   * @returns {string} Conteúdo CSS modificado
+   */
+  addCustomCssRule(cssContent, selector, rule) {
+    const newRule = `${selector} {\n  ${rule}\n}`;
+    
+    // Adicionar no final do arquivo, antes dos media queries se existirem
+    const mediaQueryIndex = cssContent.lastIndexOf('@media');
+    
+    if (mediaQueryIndex !== -1) {
+      // Inserir antes das media queries
+      return cssContent.slice(0, mediaQueryIndex) + '\n' + newRule + '\n' + cssContent.slice(mediaQueryIndex);
+    } else {
+      // Adicionar no final
+      return cssContent + '\n\n' + newRule;
     }
-
-    // Adicionar as classes semânticas ao final do CSS
-    content += gradientClasses;
-
-    return content;
   }
 
   /**

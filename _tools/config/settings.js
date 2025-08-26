@@ -34,7 +34,8 @@ const DIRECTORIES = {
 // Padrões de arquivos a processar
 const FILE_PATTERNS = {
   PHP_FILES: '**/*.php',
-  CSS_FILES: '**/*.css', 
+  CSS_FILES: '**/*.css',
+  JS_FILES: '**/*.js',
   JSON_FILES: '**/theme.json',
   
   // Exclusões
@@ -124,7 +125,8 @@ const FILE_TYPE_SETTINGS = {
 const CLI_FLAGS = {
   // Flags de processamento
   '--css': 'Processar apenas arquivos CSS',
-  '--php': 'Processar apenas arquivos PHP', 
+  '--php': 'Processar apenas arquivos PHP',
+  '--js': 'Processar apenas arquivos JavaScript',
   '--theme': 'Processar apenas theme.json',
   '--all': 'Processar todos os tipos (padrão)',
   

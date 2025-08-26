@@ -23,6 +23,7 @@ const { VERSION_INFO } = require('./config/settings');
 const ThemeJsonProcessor = require('./processors/ThemeJsonProcessor');
 const CssProcessor = require('./processors/CssProcessor');
 const PhpProcessor = require('./processors/PhpProcessor');
+const JavaScriptProcessor = require('./processors/JavaScriptProcessor');
 
 // Importar utilitários
 const Logger = require('./utils/Logger');
@@ -93,6 +94,10 @@ class SemanticColorsPipeline {
         await this.processPhpFiles();
       }
       
+      if (this.options.all || this.options.js) {
+        await this.processJavaScriptFiles();
+      }
+      
       // Validação final se solicitada
       if (this.options.validate) {
         await this.validateResults();
@@ -123,7 +128,8 @@ class SemanticColorsPipeline {
     this.processors = {
       theme: new ThemeJsonProcessor(this.logger),
       css: new CssProcessor(this.logger),
-      php: new PhpProcessor(this.logger)
+      php: new PhpProcessor(this.logger),
+      js: new JavaScriptProcessor(this.logger)
     };
 
     // Inicializar cada processador
@@ -225,6 +231,23 @@ class SemanticColorsPipeline {
   }
 
   /**
+   * Processar arquivos JavaScript
+   */
+  async processJavaScriptFiles() {
+    this.logger.info('⚡ Processando arquivos JavaScript...');
+    
+    const jsFiles = await this.findJavaScriptFiles();
+    this.logger.info(`Encontrados ${jsFiles.length} arquivos JavaScript`);
+
+    // Processar arquivos (paralelo se habilitado)
+    if (this.options.parallel && jsFiles.length > 1) {
+      await this.processFilesInParallel(jsFiles, this.processors.js);
+    } else {
+      await this.processFilesSequentially(jsFiles, this.processors.js);
+    }
+  }
+
+  /**
    * Encontrar arquivos CSS
    * @returns {Promise<Array>} Lista de arquivos CSS
    */
@@ -243,6 +266,19 @@ class SemanticColorsPipeline {
    */
   async findPhpFiles() {
     const pattern = path.join(DIRECTORIES.BLOCKS_DIR, FILE_PATTERNS.PHP_FILES).replace(/\\/g, '/');
+    const files = await glob(pattern, {
+      ignore: FILE_PATTERNS.EXCLUDE_PATTERNS
+    });
+    
+    return files.map(file => path.resolve(file));
+  }
+
+  /**
+   * Encontrar arquivos JavaScript
+   * @returns {Promise<Array>} Lista de arquivos JavaScript
+   */
+  async findJavaScriptFiles() {
+    const pattern = path.join(DIRECTORIES.BLOCKS_DIR, FILE_PATTERNS.JS_FILES).replace(/\\/g, '/');
     const files = await glob(pattern, {
       ignore: FILE_PATTERNS.EXCLUDE_PATTERNS
     });
@@ -346,9 +382,13 @@ class SemanticColorsPipeline {
    * @returns {boolean} Se precisa de processamento
    */
   needsProcessing(content) {
-    // Verificar se contém classes Tailwind conhecidas
+    // Verificar se contém classes Tailwind conhecidas (básicas)
     const tailwindPattern = /\b(bg|text|border)-(blue|green|red|gray|white|yellow|transparent)(-\d+)?\b/;
-    return tailwindPattern.test(content);
+    
+    // Verificar se contém classes de gradiente
+    const gradientPattern = /\bbg-gradient-(to|from)-(r|l|t|b|tr|tl|br|bl)\b|\bfrom-(blue|purple|pink|green|red|yellow|gray)(-\d+)?\b|\bvia-(blue|purple|pink|green|red|yellow|gray)(-\d+)?\b|\bto-(blue|purple|pink|green|red|yellow|gray)(-\d+)?\b/;
+    
+    return tailwindPattern.test(content) || gradientPattern.test(content);
   }
 
   /**
@@ -544,9 +584,10 @@ class SemanticColorsPipeline {
     
     const options = {
       // Tipos de processamento
-      all: !args.some(arg => ['--css', '--php', '--theme'].includes(arg)),
+      all: !args.some(arg => ['--css', '--php', '--js', '--theme'].includes(arg)),
       css: args.includes('--css'),
       php: args.includes('--php'),
+      js: args.includes('--js'),
       theme: args.includes('--theme'),
       
       // Flags de controle

@@ -32,3 +32,4 @@ state,bg-error,bg-red-200,#fecaca,254 202 202,"Erro","Cor para estados de erro",
 state,bg-info,bg-blue-200,#bfdbfe,191 219 254,"Informação","Cor para estados informativos",active
 ui,card,bg-gray-250,#f9fafb,249 250 251,"Card","Fundo para componentes de card",active,
 gradient,bg-gradient-1,bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500,#3b82f6,59 130 246,"Degradê 1","Degradê azul-roxo-rosa vibrante",active,"linear-gradient(to right, #3b82f6, #8b5cf6, #ec4899)"
+gradient,bg-gradient-2,bg-gradient-to-br from-green-400 to-blue-600,#4ade80,74 222 128,"Degradê 2","Degradê verde-azul diagonal",active,"linear-gradient(to bottom right, #4ade80, #2563eb)"
